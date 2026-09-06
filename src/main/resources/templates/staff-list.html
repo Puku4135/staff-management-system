@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>スタッフ一覧</title>
@@ -8,6 +8,24 @@
 
     <h1>店舗スタッフ管理システム</h1>
     <h2>スタッフ一覧</h2>
+	
+	<a href="/staff/new">スタッフを登録する</a>
+	
+	<table border="1">
+		
+		<tr>
+			<th>ID</th>
+			<th>名前</th>
+			<th>入社日</th>
+		</tr>
+		
+		<tr th:each="staff : ${staffList}">
+			<td th:text="${staff.id}"></td>
+			<td th:text="${staff.name}"></td>
+			<td th:text="${staff.joinDate}"></td>
+		</tr>
+				
+	</table>
 
 </body>
 </html>
