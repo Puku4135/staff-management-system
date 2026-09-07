@@ -25,5 +25,16 @@ public class Staff {
     public LocalDate getJoinDate() {
         return joinDate;
     }
-
+    
+    public void setId(int id) {
+    	this.id = id;
+    }
+    
+    public void setName(String name) {
+    	this.name = name;
+    }
+    
+    public void setJoinDate(LocalDate joinDate) {
+    	this.joinDate = joinDate;
+    }
 }

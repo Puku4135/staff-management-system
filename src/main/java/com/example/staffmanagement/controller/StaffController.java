@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -36,7 +37,6 @@ public class StaffController {
 				3,"鈴木 一郎",LocalDate.of(2026,7,15)
 			)
 		);
-			
 	}
 	
 	@GetMapping("/staff")
@@ -45,7 +45,6 @@ public class StaffController {
 		model.addAttribute("staffList", staffList);
 		
 		return "staff-list";
-			
 	}
 	
 	@GetMapping("/staff/new")
@@ -67,9 +66,49 @@ public class StaffController {
 				joinDate
 			)
 		);
+		return "redirect:/staff";		
+	}
+	
+	@GetMapping("/staff/edit/{id}")
+	public String showEditForm(
+			@PathVariable int id,
+			Model model) {
+		
+		Staff targetStaff = null;
+		
+		for (Staff staff : staffList) {
+			if (staff.getId() == id) {
+				targetStaff = staff;
+				break;
+			}
+		}
+		model.addAttribute("staff", targetStaff);
+		return "staff-edit";
+	}
+	
+	@PostMapping("/staff/edit/{id}")
+	public String updateStaff(
+			@PathVariable int id,
+			@RequestParam String name,
+			@RequestParam
+			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+			LocalDate joinDate) {
+		
+		for (Staff staff : staffList) {
+			if (staff.getId() == id) {
+				staff.setName(name);
+				staff.setJoinDate(joinDate);
+				break;
+			}
+		}
+		return "redirect:/staff";
+	}
+	
+	@PostMapping("/staff/delete/{id}")
+	public String deleteStaff(@PathVariable int id) {
+		staffList.removeIf(staff -> staff.getId() == id);
 		
 		return "redirect:/staff";
-		
 	}
 
 }

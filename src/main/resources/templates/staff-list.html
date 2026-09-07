@@ -17,14 +17,22 @@
 			<th>ID</th>
 			<th>名前</th>
 			<th>入社日</th>
+			<th>操作</th>
 		</tr>
 		
 		<tr th:each="staff : ${staffList}">
 			<td th:text="${staff.id}"></td>
 			<td th:text="${staff.name}"></td>
 			<td th:text="${staff.joinDate}"></td>
+			<td>
+				<a th:href="@{/staff/edit/{id}(id=${staff.id})}">
+					編集
+				</a>
+				<form th:action="@{/staff/delete/{id}(id=${staff.id})}" method="post" style="display:inline;">
+					<button type="submit">削除</button>
+				</form>
+			</td>
 		</tr>
-				
 	</table>
 
 </body>

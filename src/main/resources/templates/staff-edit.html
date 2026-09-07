@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>スタッフ編集</title>
+</head>
+
+<body>
+
+    <h1>店舗スタッフ管理システム</h1>
+    <h2>スタッフ編集</h2>
+	<form th:action="@{/staff/edit/{id}(id=${staff.id})}" method="post">
+		<div>
+			<label>名前：</label>
+			<input type="text" name="name" th:value="${staff.name}">
+		</div>
+		<div>
+			<label>入社日：</label>
+			<input type="date" name="joinDate" th:value="${staff.joinDate}">
+		</div>
+		<div>
+			<button type="submit">更新</button>
+		</div>
+	</form>
+
+</body>
+
+</html>
