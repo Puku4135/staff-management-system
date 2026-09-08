@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>教育項目一覧</title>
+</head>
+
+<body>
+	<h1>店舗スタッフ管理システム</h1>
+	<h2>教育項目一覧</h2>
+	
+	<button type="button" onclick="showAddForm()">＋ 教育項目を追加</button>
+	
+	<form id="addForm" action="/skills" method="post" style="display:none;">
+	
+		<div>
+			<label>教育項目</label>
+			<input type="text" name="name">
+		</div>
+		
+		<div>
+			<label>カテゴリ：</label>
+			
+			<select name="category">
+				<option value="接客">接客</option>
+				<option value="調理">調理</option>
+				<option value="清掃">清掃</option>
+				<option value="店舗運営">店舗運営</option>
+				<option value="その他">その他</option>
+			</select>
+		</div>
+		
+		<div>
+			<button type="submit">追加</button>
+			<button type="button" onclick="hideAddForm()">キャンセル</button>
+		</div>
+	</form>
+	
+	<table border="1">
+		
+		<tr>
+			<th>ID</th>
+			<th>教育項目</th>
+			<th>カテゴリ</th>
+		</tr>
+		
+		<tr th:each="skill : ${skillList}">
+			<td th:text="${skill.id}"></td>
+			<td th:text="${skill.name}"></td>
+			<td th:text="${skill.category}"></td>
+		</tr>
+		
+	</table>
+	
+	<script>
+		function showAddForm() {
+			document.getElementById("addForm").style.display = "block";
+		}
+		function hideAddForm() {
+			document.getElementById("addForm").style.display = "none";
+		}
+	</script>
+</body>
+</html>

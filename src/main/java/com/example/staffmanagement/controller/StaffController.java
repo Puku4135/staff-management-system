@@ -22,19 +22,19 @@ public class StaffController {
 		
 		staffList.add(
 			new Staff(
-				1,"山田 太郎",LocalDate.of(2026,9,1)
+				1, "山田 太郎", LocalDate.of(2026,9,1)
 			)
 		);
 			
 		staffList.add(
 			new Staff(
-				2,"佐藤 花子",LocalDate.of(2026,8,20)
+				2, "佐藤 花子", LocalDate.of(2026,8,20)
 			)
 		);
 			
 		staffList.add(
 			new Staff(
-				3,"鈴木 一郎",LocalDate.of(2026,7,15)
+				3, "鈴木 一郎", LocalDate.of(2026,7,15)
 			)
 		);
 	}
