@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	
+<head>
+	<meta charset="UTF-8">
+	<title>教育状況</title>
+</head>
+<body>
+	<h1>店舗スタッフ管理システム</h1>
+	<h2>教育状況</h2>
+	<div>
+		<p>
+			スタッフ名：
+			<span th:text="${staff.name}"></span>
+			</p>
+			
+		<p>
+			入社日：
+			<span th:text="${staff.joinDate}"></span>
+		</p>
+	</div>
+	<h3>教育進捗</h3>
+	
+	<table border="1">
+		<tr>
+			<th>教育項目</th>
+			<th>カテゴリ</th>
+			<th>状態</th>
+		</tr>
+		
+		<tr th:each="skill : ${skillList}">
+			<td th:text="${skill.name}"></td>
+			<td th:text="${skill.category}"></td>
+			<td>
+				<form th:action="@{/staff/training/{staffId}/skill/{skillId}
+					(staffId=${staff.id}, skillId=${skill.id})}"
+					method="post">
+					
+					<select name="status"
+							onchange="this.form.submit()">
+						
+						<option value="NOT_STARTED"
+								th:selected="${statusMap[skill.id] == 'NOT_STARTED'}">
+							未習得
+						</option>
+						<option value="IN_PROGRESS"
+								th:selected="${statusMap[skill.id] == 'IN_PROGRESS'}">
+							練習中
+						</option>
+						<option value="COMPLETED"
+								th:selected="${statusMap[skill.id] == 'COMPLETED'}">習得済み
+						</option>
+					</select>
+				</form>
+			</td>
+		</tr>
+	</table>
+	<div>
+		<a href="/staff">スタッフ一覧へ戻る</a>
+	</div>
+</body>
+</html>

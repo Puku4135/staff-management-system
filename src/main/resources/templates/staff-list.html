@@ -25,10 +25,15 @@
 			<td th:text="${staff.name}"></td>
 			<td th:text="${staff.joinDate}"></td>
 			<td>
+				<a th:href="@{/staff/training/{id}(id=${staff.id})}">
+					教育状況
+				</a>
 				<a th:href="@{/staff/edit/{id}(id=${staff.id})}">
 					編集
 				</a>
-				<form th:action="@{/staff/delete/{id}(id=${staff.id})}" method="post" style="display:inline;">
+				<form th:action="@{/staff/delete/{id}(id=${staff.id})}"
+					method="post"
+					style="display:inline;">
 					<button type="submit">削除</button>
 				</form>
 			</td>
