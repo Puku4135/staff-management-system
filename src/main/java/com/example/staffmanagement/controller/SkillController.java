@@ -26,13 +26,15 @@ public class SkillController {
 	@PostMapping("/skills")
 	public String addSkill(
 			@RequestParam String name,
-			@RequestParam String category) {
+			@RequestParam String category,
+			@RequestParam int estimateDays) {
 		
 		managementService.getSkillList().add(
 			new Skill(
 					managementService.getSkillList().size() + 1,
 				name,
-				category
+				category,
+				estimateDays
 			)
 		);
 		return "redirect:/skills";

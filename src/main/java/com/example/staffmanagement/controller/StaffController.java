@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.staffmanagement.model.Skill;
 import com.example.staffmanagement.model.SkillStatus;
 import com.example.staffmanagement.model.Staff;
+import com.example.staffmanagement.model.TrainingProgress;
 import com.example.staffmanagement.service.ManagementService;
 
 @Controller
@@ -108,6 +109,7 @@ public class StaffController {
 		model.addAttribute("skillList", managementService.getSkillList());
 		
 		Map<Integer, String> statusMap = new HashMap<>();
+		Map<Integer, TrainingProgress> progressMap = new HashMap<>();
 		
 		for (Skill skill : managementService.getSkillList()) {
 			
@@ -115,8 +117,18 @@ public class StaffController {
 					skill.getId(),
 					managementService. getSkillStatus(id, skill.getId()). name()
 			);
+			TrainingProgress progress =
+					managementService.getTrainingProgress(
+							id, skill.getId()
+						);
+			if (progress != null) {
+				progressMap.put(
+						skill.getId(),progress
+						);
+			}
 		}
 		model.addAttribute("statusMap", statusMap);
+		model.addAttribute("progressMap", progressMap);
 		
 		return "staff-training";
 	}
@@ -131,15 +143,19 @@ public class StaffController {
 	}
 	
 	@PostMapping("/staff/training/{staffId}/skill/{skillId}")
-	public String updateTrainingStatus(
+	public String updateTrainingprogress(
 			@PathVariable int staffId,
 			@PathVariable int skillId,
-			@RequestParam SkillStatus status) {
+			@RequestParam SkillStatus status,
+			@RequestParam String trainerName,
+			@RequestParam String memo) {
 		
-		managementService.updateSkillStatus(
+		managementService.updateTrainingProgress(
 			staffId,
 			skillId,
-			status
+			status,
+			trainerName,
+			memo
 		);
 		return "redirect:/staff/training/" + staffId;
 	}
