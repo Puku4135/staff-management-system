@@ -146,5 +146,48 @@ public class ManagementService {
 			)
 		);
 	}
-
+	
+	public void deleteStaff(int staffId) {
+		
+		staffList.removeIf(
+			staff -> staff.getId() == staffId
+		);
+		progressList.removeIf(
+			progress -> progress.getStaffId() == staffId
+		);
+	}
+	
+	public void deleteSkill(int skillId) {
+		
+		skillList.removeIf(
+			skill -> skill.getId() == skillId
+		);
+		progressList.removeIf(
+			progress -> progress.getSkillId() == skillId
+		);
+	}
+	
+	public int getNextStaffId() {
+		int maxId = 0;
+		
+		for (Staff staff : staffList) {
+			
+			if (staff.getId() > maxId) {
+				maxId = staff.getId();
+			}
+		}
+		return maxId + 1;
+	}
+	
+	public int getNextSkillId() {
+		int maxId = 0;
+		
+		for (Skill skill : skillList) {
+			
+			if (skill.getId() > maxId) {
+				maxId = skill.getId();
+			}
+		}
+		return maxId + 1;
+	}
 }

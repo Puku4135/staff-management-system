@@ -3,6 +3,7 @@ package com.example.staffmanagement.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -27,18 +28,95 @@ public class SkillController {
 	public String addSkill(
 			@RequestParam String name,
 			@RequestParam String category,
-			@RequestParam int estimateDays) {
+			@RequestParam(required = false)
+			Integer estimatedDays,
+			Model model) {
+		
+		if (name == null || name.trim().isEmpty()) {
+			
+			model.addAttribute(
+				"errorMessage",
+				"教育項目名を入力してください。"
+			);
+			model.addAttribute(
+				"skillList",
+				managementService.getSkillList()
+			);
+			return "skill-list";
+		}
+		
+		if (estimatedDays == null || estimatedDays < 1) {
+			
+			model.addAttribute(
+				"errorMessage",
+				"習得目安は1日以上で入力してください。"
+			);
+			model.addAttribute(
+				"skillList",
+				managementService.getSkillList()
+			);
+			return "skill-list";
+		}
 		
 		managementService.getSkillList().add(
 			new Skill(
-					managementService.getSkillList().size() + 1,
-				name,
+					managementService.getNextSkillId(),
+				name.trim(),
 				category,
-				estimateDays
+				estimatedDays
 			)
 		);
 		return "redirect:/skills";
 	}
-
+	
+	@GetMapping("/skills/edit/{id}")
+	public String showEditForm(
+			@PathVariable int id,
+			Model model) {
+		
+		Skill targetSkill = null;
+		
+		for (Skill skill : managementService.getSkillList()) {
+			
+			if (skill.getId() == id) {
+				targetSkill = skill;
+				break;
+			}
+		}
+		
+		model.addAttribute(
+			"skill",
+			targetSkill
+		);
+		return "skill-edit";
+	}
+	
+	@PostMapping("/skills/edit/{id}")
+	public String updateSkill(
+			@PathVariable int id,
+			@RequestParam String name,
+			@RequestParam String category,
+			@RequestParam int estimatedDays) {
+		
+		for (Skill skill : managementService.getSkillList()) {
+			
+			if (skill.getId() == id) {
+				skill.setName(name);
+				skill.setCategory(category);
+				skill.setEstimatedDays(estimatedDays);
+				break;
+			}
+		}
+		return "redirect:/skills";
+	}
+	
+	@PostMapping("/skills/delete/{id}")
+	public String deleteSkill(
+			@PathVariable int id) {
+		
+		managementService.deleteSkill(id);
+		
+		return "redirect:/skills";
+	}
 }
 

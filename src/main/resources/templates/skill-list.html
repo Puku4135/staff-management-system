@@ -9,14 +9,24 @@
 <body>
 	<h1>店舗スタッフ管理システム</h1>
 	<h2>教育項目一覧</h2>
+	<a href="/staff">スタッフ一覧へ戻る</a>
+	
+	<p th:if="${errorMessage != null}"
+		th:text="${errorMessage}">
+	</p>
 	
 	<button type="button" onclick="showAddForm()">＋ 教育項目を追加</button>
 	
-	<form id="addForm" action="/skills" method="post" style="display:none;">
+	<form id="addForm"
+			action="/skills"
+			method="post"
+			style="display:none;">
 	
 		<div>
 			<label>教育項目</label>
-			<input type="text" name="name">
+			<input type="text"
+					name="name"
+					required>
 		</div>
 		
 		<div>
@@ -34,8 +44,9 @@
 		<div>
 			<label>習得目安</label>
 			<input type="number"
-					name="estimateDays"
-					min="1">
+					name="estimatedDays"
+					min="1"
+					required>
 			日
 		</div>
 		
@@ -48,18 +59,31 @@
 	<table border="1">
 		
 		<tr>
-			<th>ID</th>
+			<th>No.</th>
 			<th>教育項目</th>
 			<th>カテゴリ</th>
 			<th>習得目安</th>
+			<th>操作</th>
 		</tr>
 		
-		<tr th:each="skill : ${skillList}">
-			<td th:text="${skill.id}"></td>
+		<tr th:each="skill, stat : ${skillList}">
+			<td th:text="${stat.count}"></td>
 			<td th:text="${skill.name}"></td>
 			<td th:text="${skill.category}"></td>
 			<td>
-				<span th:text="${skill.estimateDays}"></span>日
+				<span th:text="${skill.estimatedDays}"></span>日
+			</td>
+			<td>
+				<a th:href="@{/skills/edit/{id}(id=${skill.id})}">
+					編集
+				</a>
+				<form th:action="@{/skills/delete/{id}(id=${skill.id})}"
+						method="post"
+						style="display:inline;">
+					<button type="submit">
+						削除
+					</button>
+				</form>
 			</td>
 		</tr>
 		

@@ -42,14 +42,31 @@ public class StaffController {
 	@PostMapping("/staff")
 	public String addStaff(
 			@RequestParam String name,
-			@RequestParam
+			@RequestParam(required = false)
 			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-			LocalDate joinDate) {
+			LocalDate joinDate,
+			Model model) {
+		
+		if (name == null || name.trim().isEmpty()) {
+			model.addAttribute(
+				"errorMessage",
+				"名前を入力してください。"
+			);
+			return "staff-form";
+		}
+		
+		if (joinDate == null) {
+			model.addAttribute(
+				"errorMessage",
+				"入社日を入力してください。"
+			);
+			return "staff-form";
+		}
 		
 		managementService.getStaffList().add(
 			new Staff(
-					managementService.getStaffList().size() + 1,
-				name,
+					managementService.getNextStaffId(),
+				name.trim(),
 				joinDate
 			)
 		);
@@ -137,7 +154,8 @@ public class StaffController {
 	@PostMapping("/staff/delete/{id}")
 	public String deleteStaff(
 			@PathVariable int id) {
-		managementService.getStaffList().removeIf(staff -> staff.getId() == id);
+		
+		managementService.deleteStaff(id);
 		
 		return "redirect:/staff";
 	}

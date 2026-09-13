@@ -31,5 +31,15 @@ public class Skill {
 		return estimatedDays;
 	}
 	
+	public void setName(String name) {
+		this.name = name;
+	}
+	public void setCategory(String category) {
+		this.category = category;
+	}
+	public void setEstimatedDays(int estimatedDays) {
+		this.estimatedDays = estimatedDays;
+	}
+	
 
 }

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>教育項目編集</title>
+</head>
+<body>
+	<h1>店舗スタッフ管理システム</h1>
+	<h2>教育項目編集</h2>
+	
+	<form th:action="@{/skills/edit/{id}(id=${skill.id})}"
+		method="post">
+		<div>
+			<label>教育項目：</label>
+			<input type="text"
+					name="name"
+					th:value="${skill.name}"
+					required>
+		</div>
+		<div>
+			<label>カテゴリ：</label>
+			<select name="category">
+				<option value="接客"
+						th:selected="${skill.category == '接客'}">
+					接客
+				</option>
+				<option value="調理"
+						th:selected="${skill.category == '調理'}">
+					調理
+					</option>
+				<option value="清掃"
+						th:selected="${skill.category == '清掃'}">
+					清掃
+				</option>
+				<option value="店舗運営"
+						th:selected="${skill.category == '店舗運営'}">
+					店舗運営
+				</option>
+				<option value="その他"
+						th:selected="${skill.category == 'その他'}">
+					その他
+				</option>
+			</select>
+		</div>
+		<div>
+			<label>習得目安：</label>
+			<input type="number"
+					name="estimatedDays"
+					th:value="${skill.estimatedDays}"
+					min="1"
+					required>日
+		</div>
+		<div>
+			<button type="submit">
+				更新
+			</button>
+		</div>
+	</form>
+	<div>
+		<a href="/skills">
+			教育項目一覧へ戻る
+		</a>
+	</div>
+</body>
+</html>

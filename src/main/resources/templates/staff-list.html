@@ -8,20 +8,21 @@
 
     <h1>店舗スタッフ管理システム</h1>
     <h2>スタッフ一覧</h2>
+	<a href="/skills">教育項目一覧へ</ahref>
 	
 	<a href="/staff/new">スタッフを登録する</a>
 	
 	<table border="1">
 		
 		<tr>
-			<th>ID</th>
+			<th>No.</th>
 			<th>名前</th>
 			<th>入社日</th>
 			<th>操作</th>
 		</tr>
 		
-		<tr th:each="staff : ${staffList}">
-			<td th:text="${staff.id}"></td>
+		<tr th:each="staff, stat : ${staffList}">
+			<td th:text="${stat.count}"></td>
 			<td th:text="${staff.name}"></td>
 			<td th:text="${staff.joinDate}"></td>
 			<td>
