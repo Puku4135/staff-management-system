@@ -19,8 +19,21 @@ public class SkillController {
 	}
 	
 	@GetMapping("/skills")
-	public String showSkillList(Model model) {
-		model.addAttribute("skillList", managementService.getSkillList());
+	public String showSkillList(
+			@RequestParam(required = false) String category,
+			Model model) {
+		
+		if (category == null
+				|| category.isEmpty()
+				|| category.equals("all")) {
+			model.addAttribute("skillList",
+				managementService.getSkillList());
+			} 
+		else {
+			model.addAttribute("skillList",
+				managementService.searchSkillByCategory(category));
+		}
+		model.addAttribute("selectedCategory",category);
 		return "skill-list";
 	}
 	

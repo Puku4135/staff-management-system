@@ -12,7 +12,7 @@
 		<p>
 			スタッフ名：
 			<span th:text="${staff.name}"></span>
-			</p>
+		</p>
 			
 		<p>
 			入社日：
@@ -20,7 +20,27 @@
 		</p>
 	</div>
 	<h3>教育進捗</h3>
-	
+	<form th:action="@{/staff/training/{id}(id=${staff.id})}" method="get">
+		<label>習得度：</label>
+		<select name="statusFilter">
+			<option value="all"
+					th:selected="${selectedStatus == null
+						|| selectedStatus == ''
+						|| selectedStatus == 'all'}">すべて
+			</option>
+			<option value="NOT_STARTED"
+					th:selected="${selectedStatus == 'NOT_STARTED'}">未習得
+			</option>
+			<option value="IN_PROGRESS"
+					th:selected="${selectedStatus == 'IN_PROGRESS'}">練習中
+			</option>
+			<option value="COMPLETED"
+					th:selected="${selectedStatus == 'COMPLETED'}">習得済み
+			</option>
+		</select>
+		<button type="submit">絞り込み</button>
+		<a th:href="@{/staff/training/{id}(id=${staff.id})}">クリア</a>
+	</form>
 	<table border="1">
 		<tr>
 			<th>教育項目</th>
@@ -31,27 +51,21 @@
 			<th>備考</th>
 			<th>操作</th>
 		</tr>
-		
 		<tr th:each="skill : ${skillList}">
 			<form th:action="@{/staff/training/{staffId}/skill/{skillId}
-				(staffId=${staff.id}, skillId=${skill.id})}"
-				method="post">
-				
+				(staffId=${staff.id}, skillId=${skill.id})}" method="post">
 				<td th:text="${skill.name}"></td>
 				<td th:text="${skill.category}"></td>
 				<td>
 					<select name="status">
 						<option value="NOT_STARTED"
-								th:selected="${statusMap[skill.id] == 'NOT_STARTED'}">
-							未習得
+								th:selected="${statusMap[skill.id] == 'NOT_STARTED'}">未習得
 						</option>
 						<option value="IN_PROGRESS"
-								th:selected="${statusMap[skill.id] == 'IN_PROGRESS'}">
-							練習中
+								th:selected="${statusMap[skill.id] == 'IN_PROGRESS'}">練習中
 						</option>
 						<option value="COMPLETED"
-								th:selected="${statusMap[skill.id] == 'COMPLETED'}">
-							習得済み
+								th:selected="${statusMap[skill.id] == 'COMPLETED'}">習得済み
 						</option>
 					</select>
 				</td>
@@ -62,20 +76,15 @@
 					<input type="text"
 						   name="trainerName"
 						   th:value="${progressMap[skill.id] != null
-								? progressMap[skill.id].trainerName
-								: ''}">
+								? progressMap[skill.id].trainerName: ''}">
 				</td>
 				<td>
-					<input type="text"
-						   name="memo"
+					<input type="text" name="memo"
 						   th:value="${progressMap[skill.id] != null
-								? progressMap[skill.id].memo
-								: ''}">
+								? progressMap[skill.id].memo: ''}">
 				</td>
 				<td>
-					<button type="submit">
-						保存
-					</button>
+					<button type="submit">保存</button>
 				</td>
 			</form>
 		</tr>

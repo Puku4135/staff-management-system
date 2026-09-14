@@ -8,6 +8,21 @@
 
     <h1>店舗スタッフ管理システム</h1>
     <h2>スタッフ一覧</h2>
+	
+	<form action="/staff" method="get">
+		<label>スタッフ検索：</label>
+		<input type="text"
+			name="keyword"
+			th:value="${keyword}">
+		<button type="submit">
+			検索
+		</button>
+		
+		<a href="/staff">
+			クリア
+		</a>
+	</form>
+	
 	<a href="/skills">教育項目一覧へ</ahref>
 	
 	<a href="/staff/new">スタッフを登録する</a>

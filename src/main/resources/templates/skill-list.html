@@ -9,6 +9,33 @@
 <body>
 	<h1>店舗スタッフ管理システム</h1>
 	<h2>教育項目一覧</h2>
+	<form action="/skills" method="get">
+		<label>カテゴリ：</label>
+		<select name="category">
+			<option value="all"th:selected="${selectedCategory == null
+					|| selectedCategory == ''
+					|| selectedCategory == 'all'}">すべて
+			</option>
+			<option value="接客"
+					th:selected="${selectedCategory == '接客'}">接客
+			</option>
+			<option value="調理"
+					th:selected="${selectedCategory == '調理'}">調理
+			</option>
+			<option value="清掃"
+					th:selected="${selectedCategory == '清掃'}">清掃
+			</option>
+			<option value="店舗運営"
+					th:selected="${selectedCategory == '店舗運営'}">店舗運営
+			</option>
+			<option value="その他"
+					th:selected="${selectedCategory == 'その他'}">その他
+			</option>
+		</select>
+		<button type="submit">絞り込み</button>
+		<a href="/skills">クリア</a>
+	</form>
+	
 	<a href="/staff">スタッフ一覧へ戻る</a>
 	
 	<p th:if="${errorMessage != null}"
@@ -24,14 +51,10 @@
 	
 		<div>
 			<label>教育項目</label>
-			<input type="text"
-					name="name"
-					required>
+			<input type="text" name="name" required>
 		</div>
-		
 		<div>
 			<label>カテゴリ：</label>
-			
 			<select name="category">
 				<option value="接客">接客</option>
 				<option value="調理">調理</option>
@@ -40,24 +63,16 @@
 				<option value="その他">その他</option>
 			</select>
 		</div>
-		
 		<div>
 			<label>習得目安</label>
-			<input type="number"
-					name="estimatedDays"
-					min="1"
-					required>
-			日
+			<input type="number" name="estimatedDays" min="1" required>日
 		</div>
-		
 		<div>
 			<button type="submit">追加</button>
 			<button type="button" onclick="hideAddForm()">キャンセル</button>
 		</div>
 	</form>
-	
 	<table border="1">
-		
 		<tr>
 			<th>No.</th>
 			<th>教育項目</th>
@@ -65,7 +80,6 @@
 			<th>習得目安</th>
 			<th>操作</th>
 		</tr>
-		
 		<tr th:each="skill, stat : ${skillList}">
 			<td th:text="${stat.count}"></td>
 			<td th:text="${skill.name}"></td>
@@ -74,28 +88,19 @@
 				<span th:text="${skill.estimatedDays}"></span>日
 			</td>
 			<td>
-				<a th:href="@{/skills/edit/{id}(id=${skill.id})}">
-					編集
-				</a>
+				<a th:href="@{/skills/edit/{id}(id=${skill.id})}">編集</a>
 				<form th:action="@{/skills/delete/{id}(id=${skill.id})}"
-						method="post"
-						style="display:inline;">
-					<button type="submit">
-						削除
-					</button>
+						method="post" style="display:inline;">
+					<button type="submit">削除</button>
 				</form>
 			</td>
 		</tr>
-		
-	</table>
-	
+		</table>
 	<script>
 		function showAddForm() {
-			document.getElementById("addForm").style.display = "block";
-		}
+			document.getElementById("addForm").style.display = "block";}
 		function hideAddForm() {
-			document.getElementById("addForm").style.display = "none";
-		}
+			document.getElementById("addForm").style.display = "none";}
 	</script>
 </body>
 </html>

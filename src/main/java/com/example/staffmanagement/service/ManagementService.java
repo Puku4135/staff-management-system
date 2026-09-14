@@ -190,4 +190,41 @@ public class ManagementService {
 		}
 		return maxId + 1;
 	}
+	
+	public List<Staff> searchStaff(String keyword) {
+		List<Staff> resultList = new ArrayList<>();
+		
+		for (Staff staff : staffList) {
+			if (staff.getName().contains(keyword)) {
+				resultList.add(staff);
+			}
+		}
+		return resultList;
+	}
+	
+	public List<Skill> searchSkillByCategory(String category) {
+		List<Skill> resultList = new ArrayList<>();
+		
+		for (Skill skill : skillList) {
+			if (skill.getCategory().equals(category)) {
+				resultList.add(skill);
+			}
+		}
+		return resultList;
+	}
+	
+	public List<Skill> searchSkillByStatus(
+			int staffId,SkillStatus status) {
+		List<Skill> resultList = new ArrayList<>();
+		
+		for (Skill skill : skillList) {
+			SkillStatus currentStatus = getSkillStatus(
+					staffId,skill.getId());
+			
+			if (currentStatus == status) {
+				resultList.add(skill);
+			}
+		}
+		return resultList;
+	}
 }

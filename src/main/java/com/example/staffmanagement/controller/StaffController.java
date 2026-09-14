@@ -2,6 +2,7 @@ package com.example.staffmanagement.controller;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -27,9 +28,22 @@ public class StaffController {
 	}
 	
 	@GetMapping("/staff")
-	public String showStaffList(Model model) {
+	public String showStaffList(
+			@RequestParam(required = false) String keyword,
+			Model model) {
 		
-		model.addAttribute("staffList", managementService.getStaffList());
+		if (keyword == null || keyword.trim().isEmpty()) {
+			model.addAttribute(
+				"staffList",
+				managementService.getStaffList()
+			);
+		} else {
+			model.addAttribute(
+				"staffList",
+				managementService.searchStaff(keyword.trim())
+			);
+		}
+		model.addAttribute("keyword", keyword);
 		
 		return "staff-list";
 	}
@@ -111,6 +125,8 @@ public class StaffController {
 	@GetMapping("/staff/training/{id}")
 	public String showTrainingStatus(
 			@PathVariable int id,
+			@RequestParam(required = false)
+			String statusFilter,
 			Model model) {
 		
 		Staff targetStaff = null;
@@ -123,12 +139,26 @@ public class StaffController {
 		}
 		
 		model.addAttribute("staff", targetStaff);
-		model.addAttribute("skillList", managementService.getSkillList());
+		
+		List<Skill> displaySkillList;
+		
+		if (statusFilter == null
+				|| statusFilter.isEmpty()
+				|| statusFilter.equals("all")) {
+			displaySkillList =managementService.getSkillList();
+			}
+		else {
+			SkillStatus selectedStatus = SkillStatus.valueOf(statusFilter);
+			displaySkillList = managementService.searchSkillByStatus(
+					id, selectedStatus);
+		}
+		
+		model.addAttribute("skillList", displaySkillList);
 		
 		Map<Integer, String> statusMap = new HashMap<>();
 		Map<Integer, TrainingProgress> progressMap = new HashMap<>();
 		
-		for (Skill skill : managementService.getSkillList()) {
+		for (Skill skill : displaySkillList) {
 			
 			statusMap.put(
 					skill.getId(),
@@ -146,6 +176,7 @@ public class StaffController {
 		}
 		model.addAttribute("statusMap", statusMap);
 		model.addAttribute("progressMap", progressMap);
+		model.addAttribute("selectedStatus", statusFilter);
 		
 		return "staff-training";
 	}
