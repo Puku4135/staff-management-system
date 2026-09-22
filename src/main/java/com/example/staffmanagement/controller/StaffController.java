@@ -77,13 +77,9 @@ public class StaffController {
 			return "staff-form";
 		}
 		
-		managementService.getStaffList().add(
-			new Staff(
-					managementService.getNextStaffId(),
-				name.trim(),
-				joinDate
-			)
-		);
+		managementService.saveStaff(
+				new Staff(name.trim(),joinDate)
+			);
 		return "redirect:/staff";		
 	}
 	
@@ -92,14 +88,9 @@ public class StaffController {
 			@PathVariable int id,
 			Model model) {
 		
-		Staff targetStaff = null;
+		Staff targetStaff =
+		        managementService.getStaffById(id);
 		
-		for (Staff staff : managementService.getStaffList()) {
-			if (staff.getId() == id) {
-				targetStaff = staff;
-				break;
-			}
-		}
 		model.addAttribute("staff", targetStaff);
 		return "staff-edit";
 	}
@@ -112,13 +103,9 @@ public class StaffController {
 			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 			LocalDate joinDate) {
 		
-		for (Staff staff : managementService.getStaffList()) {
-			if (staff.getId() == id) {
-				staff.setName(name);
-				staff.setJoinDate(joinDate);
-				break;
-			}
-		}
+		managementService.updateStaff(
+				id, name.trim(), joinDate
+		);
 		return "redirect:/staff";
 	}
 	

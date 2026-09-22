@@ -48,8 +48,8 @@
 					編集
 				</a>
 				<form th:action="@{/staff/delete/{id}(id=${staff.id})}"
-					method="post"
-					style="display:inline;">
+						method="post" style="display:inline;"
+						onsubmit="return confirm('このスタッフを削除しますか？');">
 					<button type="submit">削除</button>
 				</form>
 			</td>

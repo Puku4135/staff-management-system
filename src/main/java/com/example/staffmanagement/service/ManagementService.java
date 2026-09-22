@@ -10,6 +10,7 @@ import com.example.staffmanagement.model.Skill;
 import com.example.staffmanagement.model.SkillStatus;
 import com.example.staffmanagement.model.Staff;
 import com.example.staffmanagement.model.TrainingProgress;
+import com.example.staffmanagement.repository.StaffRepository;
 
 @Service
 public class ManagementService {
@@ -17,23 +18,11 @@ public class ManagementService {
 	private List<Staff> staffList = new ArrayList<>();
 	private List<Skill> skillList = new ArrayList<>();
 	private List<TrainingProgress> progressList = new ArrayList<>();
+	private StaffRepository staffRepository;
 	
-	public ManagementService() {
-		staffList.add(
-			new Staff(
-				1 ,"山田 太郎", LocalDate.of(2026,9,1)
-			)
-		);
-		staffList.add(
-			new Staff(
-				2, "佐藤 花子", LocalDate.of(2026,8,20)
-			)
-		);
-		staffList.add(
-			new Staff(
-				3, "鈴木 一郎", LocalDate.of(2026,7,15)
-			)
-		);
+	public ManagementService(StaffRepository staffRepository) {
+		
+		this.staffRepository = staffRepository;
 		
 		skillList.add(
 			new Skill(
@@ -61,10 +50,33 @@ public class ManagementService {
 			)
 		);
 	}
-		
+	
 	public List<Staff> getStaffList() {
-		return staffList;
+		return staffRepository.findAll();
 	}
+	public void saveStaff(Staff staff) {
+	    staffRepository.save(staff);
+	}
+	public Staff getStaffById(int id) {
+		
+		return staffRepository
+				.findById(id)
+				.orElse(null);
+	}
+	public void updateStaff(
+			int id,
+			String name,
+			LocalDate joinDate) {
+		
+		Staff staff = getStaffById(id);
+		
+		if (staff != null) {
+			staff.setName(name);
+			staff.setJoinDate(joinDate);
+			staffRepository.save(staff);
+		}
+	}
+	
 	public List<Skill> getSkillList() {
 		return skillList;
 	}
@@ -149,12 +161,9 @@ public class ManagementService {
 	
 	public void deleteStaff(int staffId) {
 		
-		staffList.removeIf(
-			staff -> staff.getId() == staffId
-		);
+		staffRepository.deleteById(staffId);
 		progressList.removeIf(
-			progress -> progress.getStaffId() == staffId
-		);
+			progress -> progress.getStaffId() == staffId);
 	}
 	
 	public void deleteSkill(int skillId) {
@@ -165,18 +174,6 @@ public class ManagementService {
 		progressList.removeIf(
 			progress -> progress.getSkillId() == skillId
 		);
-	}
-	
-	public int getNextStaffId() {
-		int maxId = 0;
-		
-		for (Staff staff : staffList) {
-			
-			if (staff.getId() > maxId) {
-				maxId = staff.getId();
-			}
-		}
-		return maxId + 1;
 	}
 	
 	public int getNextSkillId() {
@@ -194,10 +191,9 @@ public class ManagementService {
 	public List<Staff> searchStaff(String keyword) {
 		List<Staff> resultList = new ArrayList<>();
 		
-		for (Staff staff : staffList) {
+		for (Staff staff : staffRepository.findAll()) {
 			if (staff.getName().contains(keyword)) {
-				resultList.add(staff);
-			}
+				resultList.add(staff);}
 		}
 		return resultList;
 	}
