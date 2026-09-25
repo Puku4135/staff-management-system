@@ -10,45 +10,22 @@ import com.example.staffmanagement.model.Skill;
 import com.example.staffmanagement.model.SkillStatus;
 import com.example.staffmanagement.model.Staff;
 import com.example.staffmanagement.model.TrainingProgress;
+import com.example.staffmanagement.repository.SkillRepository;
 import com.example.staffmanagement.repository.StaffRepository;
 
 @Service
 public class ManagementService {
 	
-	private List<Staff> staffList = new ArrayList<>();
-	private List<Skill> skillList = new ArrayList<>();
-	private List<TrainingProgress> progressList = new ArrayList<>();
 	private StaffRepository staffRepository;
+	private SkillRepository skillRepository;
+	private List<TrainingProgress> progressList = new ArrayList<>();
 	
-	public ManagementService(StaffRepository staffRepository) {
+	public ManagementService(
+			StaffRepository staffRepository,
+			SkillRepository skillRepository) {
 		
 		this.staffRepository = staffRepository;
-		
-		skillList.add(
-			new Skill(
-				1, "挨拶", "接客", 1
-			)
-		);
-		skillList.add(
-			new Skill(
-				2, "レジ操作", "接客", 1
-			)
-		);
-		skillList.add(
-			new Skill(
-				3, "商品提供", "接客", 2
-			)
-		);
-		skillList.add(
-			new Skill(
-				4, "基本調理", "清掃", 3
-			)
-		);
-		skillList.add(
-			new Skill(
-				5, "清掃", "清掃", 2
-			)
-		);
+		this.skillRepository = skillRepository;
 	}
 	
 	public List<Staff> getStaffList() {
@@ -60,13 +37,10 @@ public class ManagementService {
 	public Staff getStaffById(int id) {
 		
 		return staffRepository
-				.findById(id)
-				.orElse(null);
+				.findById(id).orElse(null);
 	}
 	public void updateStaff(
-			int id,
-			String name,
-			LocalDate joinDate) {
+			int id, String name, LocalDate joinDate) {
 		
 		Staff staff = getStaffById(id);
 		
@@ -78,8 +52,29 @@ public class ManagementService {
 	}
 	
 	public List<Skill> getSkillList() {
-		return skillList;
+		return skillRepository.findAll();
 	}
+	public void saveSkill(Skill skill) {
+		skillRepository.save(skill);
+	}
+	public Skill getSkillById(int id) {
+		
+		return skillRepository
+				.findById(id).orElse(null);
+	}
+	public void updateSkill(
+			int id, String name, String category, int estimatedDays) {
+		
+		Skill skill = getSkillById(id);
+		
+		if (skill != null) {
+			skill.setName(name);
+			skill.setCategory(category);
+			skill.setEstimatedDays(estimatedDays);
+			skillRepository.save(skill);
+		}
+	}
+	
 	public List<TrainingProgress> getProgressList() {
 		return progressList;
 	}
@@ -168,24 +163,9 @@ public class ManagementService {
 	
 	public void deleteSkill(int skillId) {
 		
-		skillList.removeIf(
-			skill -> skill.getId() == skillId
-		);
+		skillRepository.deleteById(skillId);
 		progressList.removeIf(
-			progress -> progress.getSkillId() == skillId
-		);
-	}
-	
-	public int getNextSkillId() {
-		int maxId = 0;
-		
-		for (Skill skill : skillList) {
-			
-			if (skill.getId() > maxId) {
-				maxId = skill.getId();
-			}
-		}
-		return maxId + 1;
+			progress -> progress.getSkillId() == skillId);
 	}
 	
 	public List<Staff> searchStaff(String keyword) {
@@ -201,7 +181,7 @@ public class ManagementService {
 	public List<Skill> searchSkillByCategory(String category) {
 		List<Skill> resultList = new ArrayList<>();
 		
-		for (Skill skill : skillList) {
+		for (Skill skill : skillRepository.findAll()) {
 			if (skill.getCategory().equals(category)) {
 				resultList.add(skill);
 			}
@@ -213,7 +193,7 @@ public class ManagementService {
 			int staffId,SkillStatus status) {
 		List<Skill> resultList = new ArrayList<>();
 		
-		for (Skill skill : skillList) {
+		for (Skill skill : skillRepository.findAll()) {
 			SkillStatus currentStatus = getSkillStatus(
 					staffId,skill.getId());
 			

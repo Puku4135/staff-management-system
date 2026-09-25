@@ -71,14 +71,9 @@ public class SkillController {
 			return "skill-list";
 		}
 		
-		managementService.getSkillList().add(
-			new Skill(
-					managementService.getNextSkillId(),
-				name.trim(),
-				category,
-				estimatedDays
-			)
-		);
+		managementService.saveSkill(
+			new Skill(name.trim(), category, estimatedDays)
+			);
 		return "redirect:/skills";
 	}
 	
@@ -87,15 +82,8 @@ public class SkillController {
 			@PathVariable int id,
 			Model model) {
 		
-		Skill targetSkill = null;
-		
-		for (Skill skill : managementService.getSkillList()) {
-			
-			if (skill.getId() == id) {
-				targetSkill = skill;
-				break;
-			}
-		}
+		Skill targetSkill =
+				managementService.getSkillById(id);
 		
 		model.addAttribute(
 			"skill",
@@ -111,15 +99,8 @@ public class SkillController {
 			@RequestParam String category,
 			@RequestParam int estimatedDays) {
 		
-		for (Skill skill : managementService.getSkillList()) {
-			
-			if (skill.getId() == id) {
-				skill.setName(name);
-				skill.setCategory(category);
-				skill.setEstimatedDays(estimatedDays);
-				break;
-			}
-		}
+		managementService.updateSkill(
+				id, name.trim(), category, estimatedDays);
 		return "redirect:/skills";
 	}
 	
