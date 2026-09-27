@@ -12,20 +12,23 @@ import com.example.staffmanagement.model.Staff;
 import com.example.staffmanagement.model.TrainingProgress;
 import com.example.staffmanagement.repository.SkillRepository;
 import com.example.staffmanagement.repository.StaffRepository;
+import com.example.staffmanagement.repository.TrainingProgressRepository;
 
 @Service
 public class ManagementService {
 	
 	private StaffRepository staffRepository;
 	private SkillRepository skillRepository;
-	private List<TrainingProgress> progressList = new ArrayList<>();
+	private TrainingProgressRepository trainingProgressRepository;
 	
 	public ManagementService(
 			StaffRepository staffRepository,
-			SkillRepository skillRepository) {
+			SkillRepository skillRepository,
+			TrainingProgressRepository trainingProgressRepository) {
 		
 		this.staffRepository = staffRepository;
 		this.skillRepository = skillRepository;
+		this.trainingProgressRepository = trainingProgressRepository;
 	}
 	
 	public List<Staff> getStaffList() {
@@ -76,47 +79,32 @@ public class ManagementService {
 	}
 	
 	public List<TrainingProgress> getProgressList() {
-		return progressList;
+		return trainingProgressRepository.findAll();
 	}
 	
 	public TrainingProgress getTrainingProgress(
 			int staffId, int skillId) {
-		
-		for (TrainingProgress progress : progressList) {
-			
-			if (progress.getStaffId() == staffId
-					&& progress.getSkillId() == skillId) {
-				
-				return progress;
-			}
-		}
-		return null;
+		return trainingProgressRepository
+				.findByStaffIdAndSkillId(
+					staffId, skillId)
+				.orElse(null);
 	}
 	
 	public void updateTrainingProgress(
-			int staffId,
-			int skillId,
-			SkillStatus status,
-			String trainerName,
-			String memo) {
+			int staffId, int skillId, SkillStatus status,
+			String trainerName, String memo) {
+		TrainingProgress targetProgress = getTrainingProgress(
+				staffId, skillId);
 		
-		TrainingProgress targetProgress =
-				getTrainingProgress(
-					staffId,
-					skillId
-				);
 		if (targetProgress == null) {
-			targetProgress =
-				new TrainingProgress(
-					staffId,
-					skillId,
-					status
-				);
-			progressList.add(targetProgress);
+			targetProgress = new TrainingProgress(
+				staffId, skillId, status);
 		}
 		targetProgress.setStatus(status);
 		targetProgress.setTrainerName(trainerName);
 		targetProgress.setMemo(memo);
+		trainingProgressRepository.save(
+				targetProgress);
 	}
 	
 	public SkillStatus getSkillStatus(
@@ -135,37 +123,16 @@ public class ManagementService {
 		return SkillStatus.NOT_STARTED;
 	}
 	
-	public void updateSkillStatus(
-			int staffId, int skillId, SkillStatus status) {
-		
-		for (TrainingProgress progress : progressList) {
-			
-			if (progress.getStaffId() == staffId
-					&& progress.getSkillId() == skillId) {
-				
-				progress.setStatus(status);
-				return;
-			}
-		}
-		progressList.add(
-			new TrainingProgress(
-				staffId, skillId, status
-			)
-		);
-	}
-	
 	public void deleteStaff(int staffId) {
+		trainingProgressRepository .deleteByStaffId(staffId);
 		
 		staffRepository.deleteById(staffId);
-		progressList.removeIf(
-			progress -> progress.getStaffId() == staffId);
 	}
 	
 	public void deleteSkill(int skillId) {
+		trainingProgressRepository .deleteBySkillId(skillId);
 		
 		skillRepository.deleteById(skillId);
-		progressList.removeIf(
-			progress -> progress.getSkillId() == skillId);
 	}
 	
 	public List<Staff> searchStaff(String keyword) {
