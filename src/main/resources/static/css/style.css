@@ -1,0 +1,1057 @@
+/* ========================================
+   基本設定
+======================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+
+    font-family:
+        "Segoe UI",
+        "Yu Gothic UI",
+        "Meiryo",
+        sans-serif;
+
+    background-color: #f4f7fb;
+    color: #1e293b;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+    font-family: inherit;
+}
+
+
+/* ========================================
+   全体レイアウト
+======================================== */
+
+.app-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+
+/* ========================================
+   サイドバー
+======================================== */
+
+.sidebar {
+    width: 230px;
+    min-height: 100vh;
+    flex-shrink: 0;
+
+    padding: 28px 14px;
+
+    background-color: #ffffff;
+
+    border-right: 1px solid #e5e7eb;
+
+    box-shadow:
+        2px 0 10px rgba(15, 23, 42, 0.03);
+}
+
+.sidebar-title {
+    margin-bottom: 32px;
+    padding: 0 14px;
+
+    color: #0f172a;
+
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+.sidebar-link {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    min-height: 48px;
+
+    padding: 12px 16px;
+
+    border-radius: 10px;
+
+    color: #64748b;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    transition:
+        background-color 0.2s,
+        color 0.2s;
+}
+
+.sidebar-link:hover {
+    background-color: #eff6ff;
+    color: #2563eb;
+}
+
+.sidebar-link.active {
+    background-color: #e8f1ff;
+    color: #2563eb;
+}
+
+.sidebar-link.active::before {
+    content: "";
+
+    position: absolute;
+
+    top: 8px;
+    bottom: 8px;
+    left: -14px;
+
+    width: 4px;
+
+    border-radius: 0 4px 4px 0;
+
+    background-color: #2563eb;
+}
+
+
+/* ========================================
+   メインエリア
+======================================== */
+
+.main-area {
+    flex: 1;
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* ========================================
+   上部ヘッダー
+======================================== */
+
+.topbar {
+    height: 76px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 30px;
+
+    background-color: #ffffff;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    box-shadow:
+        0 2px 8px rgba(15, 23, 42, 0.03);
+}
+
+.topbar-title {
+    color: #0f172a;
+
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.topbar-user {
+    padding: 9px 15px;
+
+    border-radius: 999px;
+
+    background-color: #f1f5f9;
+
+    color: #475569;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+/* ========================================
+   メインコンテンツ
+======================================== */
+
+.content {
+    width: 100%;
+
+    padding: 26px 30px 40px;
+}
+
+
+/* ========================================
+   ページタイトル
+======================================== */
+
+.page-heading {
+    margin-bottom: 24px;
+}
+
+.page-heading h1 {
+    margin: 0 0 7px;
+
+    color: #0f172a;
+
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.page-heading p {
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 14px;
+}
+
+
+/* ========================================
+   集計カード
+======================================== */
+
+.summary-cards {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 18px;
+
+    margin-bottom: 22px;
+}
+
+.summary-card {
+    min-height: 125px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 20px;
+
+    padding: 22px 24px;
+
+    background-color: #ffffff;
+
+    border: 1px solid #edf1f7;
+    border-radius: 15px;
+
+    box-shadow:
+        0 5px 16px rgba(15, 23, 42, 0.05);
+}
+
+.summary-icon {
+    width: 62px;
+    height: 62px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    font-size: 27px;
+}
+
+.summary-icon-blue {
+    background-color: #e0edff;
+}
+
+.summary-icon-yellow {
+    background-color: #fff3d6;
+}
+
+.summary-icon-green {
+    background-color: #dcfce7;
+
+    color: #16a34a;
+
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.summary-label {
+    margin-bottom: 6px;
+
+    color: #64748b;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.summary-value {
+    color: #0f172a;
+
+    font-size: 34px;
+    font-weight: 700;
+
+    line-height: 1.1;
+}
+
+
+/* ========================================
+   共通パネル
+======================================== */
+
+.panel {
+    margin-bottom: 22px;
+
+    padding: 22px;
+
+    background-color: #ffffff;
+
+    border: 1px solid #edf1f7;
+    border-radius: 15px;
+
+    box-shadow:
+        0 5px 16px rgba(15, 23, 42, 0.045);
+}
+
+.panel-title {
+    margin-bottom: 18px;
+
+    color: #0f172a;
+
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 16px;
+
+    margin-bottom: 18px;
+}
+
+.section-header h2 {
+    margin: 0;
+
+    color: #0f172a;
+
+    font-size: 21px;
+    font-weight: 700;
+}
+
+.list-count {
+    color: #64748b;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* ========================================
+   検索・絞り込み
+======================================== */
+
+.search-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    gap: 18px;
+
+    flex-wrap: wrap;
+}
+
+.search-form,
+.training-filter {
+    display: flex;
+    align-items: flex-end;
+
+    gap: 10px;
+
+    flex-wrap: wrap;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+.form-group label {
+    color: #475569;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* ========================================
+   入力欄
+======================================== */
+
+input[type="text"],
+input[type="date"],
+input[type="number"],
+select,
+textarea {
+    padding: 10px 12px;
+
+    background-color: #ffffff;
+
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+
+    outline: none;
+
+    color: #334155;
+
+    font-size: 14px;
+
+    transition:
+        border-color 0.2s,
+        box-shadow 0.2s;
+}
+
+input[type="text"] {
+    min-width: 280px;
+}
+
+select {
+    min-width: 150px;
+}
+
+textarea {
+    min-height: 85px;
+
+    resize: vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: #3b82f6;
+
+    box-shadow:
+        0 0 0 3px rgba(59, 130, 246, 0.12);
+}
+
+
+/* ========================================
+   ボタン
+======================================== */
+
+.button {
+    min-height: 39px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 9px 17px;
+
+    border: none;
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    white-space: nowrap;
+
+    transition:
+        background-color 0.2s,
+        transform 0.1s,
+        box-shadow 0.2s;
+}
+
+.button:hover {
+    transform: translateY(-1px);
+}
+
+.button-primary {
+    background-color: #2575ed;
+    color: #ffffff;
+
+    box-shadow:
+        0 3px 8px rgba(37, 117, 237, 0.15);
+}
+
+.button-primary:hover {
+    background-color: #1d64d2;
+}
+
+.button-secondary {
+    background-color: #eef2f7;
+    color: #334155;
+}
+
+.button-secondary:hover {
+    background-color: #e2e8f0;
+}
+
+.button-danger {
+    background-color: #ef4444;
+    color: #ffffff;
+}
+
+.button-danger:hover {
+    background-color: #dc2626;
+}
+
+.button-success {
+    background-color: #22c55e;
+    color: #ffffff;
+}
+
+
+/* ========================================
+   操作ボタン
+======================================== */
+
+.actions {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    flex-wrap: wrap;
+}
+
+.actions form {
+    margin: 0;
+}
+
+
+/* ========================================
+   テーブル
+======================================== */
+
+.table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+}
+
+table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    background-color: #ffffff;
+}
+
+thead {
+    background-color: #edf3f9;
+}
+
+th {
+    padding: 13px 15px;
+
+    text-align: left;
+
+    color: #475569;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    border-bottom: 1px solid #dbe3ed;
+}
+
+td {
+    padding: 13px 15px;
+
+    color: #334155;
+
+    font-size: 14px;
+
+    vertical-align: middle;
+
+    border-bottom: 1px solid #e9eef5;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+tbody tr {
+    transition: background-color 0.15s;
+}
+
+tbody tr:hover {
+    background-color: #f8fbff;
+}
+
+
+/* ========================================
+   スタッフ表示
+======================================== */
+
+.staff-name-cell {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    font-weight: 600;
+}
+
+.staff-avatar {
+    width: 36px;
+    height: 36px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background-color: #e7effb;
+
+    font-size: 17px;
+}
+
+
+/* ========================================
+   ステータスバッジ
+======================================== */
+
+.status-badge {
+    min-width: 78px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 5px 12px;
+
+    border-radius: 999px;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.status-not-started {
+    background-color: #fee2e2;
+    color: #dc2626;
+}
+
+.status-progress {
+    background-color: #dbeafe;
+    color: #2563eb;
+}
+
+.status-completed {
+    background-color: #dcfce7;
+    color: #16a34a;
+}
+
+
+/* ========================================
+   教育状況プルダウン
+======================================== */
+
+.status-select {
+    min-width: 115px;
+
+    font-weight: 600;
+}
+
+.status-select.status-not-started {
+    background-color: #fff1f2;
+    color: #be123c;
+
+    border-color: #fecdd3;
+}
+
+.status-select.status-progress {
+    background-color: #eff6ff;
+    color: #1d4ed8;
+
+    border-color: #bfdbfe;
+}
+
+.status-select.status-completed {
+    background-color: #f0fdf4;
+    color: #15803d;
+
+    border-color: #bbf7d0;
+}
+
+
+/* ========================================
+   カテゴリ・習得目安
+======================================== */
+
+.category-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 5px 10px;
+
+    border-radius: 999px;
+
+    background-color: #f1f5f9;
+
+    color: #475569;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.estimated-days {
+    display: inline-block;
+
+    padding: 5px 10px;
+
+    border-radius: 8px;
+
+    background-color: #f8fafc;
+
+    color: #475569;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* ========================================
+   登録・編集フォーム
+======================================== */
+
+.form-panel {
+    max-width: 720px;
+}
+
+.form-title {
+    margin-bottom: 7px;
+
+    color: #0f172a;
+
+    font-size: 21px;
+    font-weight: 700;
+}
+
+.form-description {
+    margin-bottom: 24px;
+
+    color: #64748b;
+
+    font-size: 14px;
+}
+
+.form-body {
+    display: flex;
+    flex-direction: column;
+
+    gap: 20px;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+.form-field label {
+    color: #334155;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+    width: 100%;
+    max-width: 500px;
+}
+
+.form-actions {
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 8px;
+}
+
+
+/* ========================================
+   エラーメッセージ
+======================================== */
+
+.error-message {
+    margin-bottom: 20px;
+
+    padding: 12px 15px;
+
+    background-color: #fff1f2;
+
+    border: 1px solid #fecdd3;
+    border-radius: 8px;
+
+    color: #be123c;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+/* ========================================
+   教育項目追加フォーム
+======================================== */
+
+.inline-add-form {
+    margin: 0 0 22px;
+
+    padding: 20px;
+
+    background-color: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+}
+
+.form-row {
+    display: flex;
+    align-items: flex-end;
+
+    gap: 12px;
+
+    flex-wrap: wrap;
+}
+
+.small-input {
+    min-width: 130px !important;
+}
+
+
+/* ========================================
+   教育状況画面
+======================================== */
+
+.staff-info-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    flex-wrap: wrap;
+}
+
+.staff-info-main {
+    display: flex;
+    flex-direction: column;
+
+    gap: 5px;
+}
+
+.staff-info-name {
+    color: #0f172a;
+
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.staff-info-sub {
+    color: #64748b;
+
+    font-size: 14px;
+}
+
+.training-table select,
+.training-table input[type="text"] {
+    min-width: 130px;
+}
+
+.training-table textarea {
+    min-width: 190px;
+    min-height: 65px;
+}
+
+.training-table .button {
+    white-space: nowrap;
+}
+
+.training-note {
+    margin-top: 12px;
+
+    color: #64748b;
+
+    font-size: 12px;
+}
+
+
+/* ========================================
+   スクロールバー
+======================================== */
+
+::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+
+    border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #94a3b8;
+}
+
+
+/* ========================================
+   タブレット
+======================================== */
+
+@media (max-width: 1100px) {
+
+    .sidebar {
+        width: 200px;
+    }
+
+    .content {
+        padding: 22px;
+    }
+
+    .summary-cards {
+        grid-template-columns:
+            repeat(3, minmax(180px, 1fr));
+    }
+
+    .summary-value {
+        font-size: 29px;
+    }
+}
+
+
+/* ========================================
+   狭めの画面
+======================================== */
+
+@media (max-width: 900px) {
+
+    .summary-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .search-row {
+        align-items: stretch;
+    }
+
+    .panel {
+        padding: 18px;
+    }
+}
+
+
+/* ========================================
+   スマホ相当
+======================================== */
+
+@media (max-width: 700px) {
+
+    .app-layout {
+        display: block;
+    }
+
+    .sidebar {
+        width: 100%;
+        min-height: auto;
+
+        padding: 14px;
+
+        border-right: none;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .sidebar-title {
+        margin-bottom: 12px;
+    }
+
+    .sidebar-menu {
+        flex-direction: row;
+    }
+
+    .sidebar-link {
+        flex: 1;
+
+        justify-content: center;
+    }
+
+    .sidebar-link.active::before {
+        display: none;
+    }
+
+    .topbar {
+        height: auto;
+
+        padding: 16px;
+    }
+
+    .topbar-title {
+        font-size: 18px;
+    }
+
+    .content {
+        padding: 16px;
+    }
+
+    .page-heading h1 {
+        font-size: 24px;
+    }
+
+    .summary-card {
+        min-height: auto;
+    }
+
+    .search-row,
+    .search-form,
+    .training-filter,
+    .actions,
+    .form-row {
+        align-items: stretch;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    input[type="number"],
+    select {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .button {
+        width: 100%;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+}

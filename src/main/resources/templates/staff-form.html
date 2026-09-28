@@ -1,32 +1,143 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>スタッフ登録</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
 </head>
+
 <body>
-	<h1>店舗スタッフ管理システム</h1>
-	<h2>スタッフ登録</h2>
-	<p th:if="${errorMessage != null}"
-		th:text="${errorMessage}">
-	</p>
-	<form action="/staff" method="post">
-		<div>
-			<label>名前：</label>
-			<input type="text" name="name"
-			required>
-		</div>
-		<div>
-			<label>入社日：</label>
-			<input type="date" name="joinDate"
-			required>
-		</div>
-		<div>
-			<button type="submit">登録</button>
-		</div>
-	</form>
-		<div>
-			<a href="/staff">スタッフ一覧へ戻る</a>
-		</div>
+
+<div class="app-layout">
+
+    <aside class="sidebar">
+
+        <div class="sidebar-title">
+            店舗スタッフ管理
+        </div>
+
+        <nav class="sidebar-menu">
+
+            <a href="/staff"
+               class="sidebar-link active">
+                スタッフ一覧
+            </a>
+
+            <a href="/skills"
+               class="sidebar-link">
+                教育項目
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <div class="main-area">
+
+        <header class="topbar">
+
+            <div class="topbar-title">
+                店舗スタッフ管理システム
+            </div>
+
+            <div class="topbar-user">
+                管理者
+            </div>
+
+        </header>
+
+
+        <main class="content">
+
+            <div class="page-heading">
+
+                <h1>スタッフ登録</h1>
+
+                <p>
+                    新しいスタッフの基本情報を登録します。
+                </p>
+
+            </div>
+
+
+            <section class="panel form-panel">
+
+                <div class="form-title">
+                    スタッフ情報
+                </div>
+
+                <div class="form-description">
+                    名前と入社日を入力してください。
+                </div>
+
+
+                <div th:if="${errorMessage != null}"
+                     class="error-message"
+                     th:text="${errorMessage}">
+                </div>
+
+
+                <form action="/staff"
+                      method="post"
+                      class="form-body">
+
+
+                    <div class="form-field">
+
+                        <label for="name">
+                            名前
+                        </label>
+
+                        <input type="text"
+                               id="name"
+                               name="name"
+                               placeholder="例：山田 太郎"
+                               required>
+
+                    </div>
+
+
+                    <div class="form-field">
+
+                        <label for="joinDate">
+                            入社日
+                        </label>
+
+                        <input type="date"
+                               id="joinDate"
+                               name="joinDate"
+                               required>
+
+                    </div>
+
+
+                    <div class="form-actions">
+
+                        <button type="submit"
+                                class="button button-primary">
+                            登録する
+                        </button>
+
+                        <a href="/staff"
+                           class="button button-secondary">
+                            一覧へ戻る
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</div>
+
 </body>
 </html>

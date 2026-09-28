@@ -1,96 +1,375 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-	
+
 <head>
-	<meta charset="UTF-8">
-	<title>教育状況</title>
+    <meta charset="UTF-8">
+    <title>教育状況</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
 </head>
+
 <body>
-	<h1>店舗スタッフ管理システム</h1>
-	<h2>教育状況</h2>
-	<div>
-		<p>
-			スタッフ名：
-			<span th:text="${staff.name}"></span>
-		</p>
-			
-		<p>
-			入社日：
-			<span th:text="${staff.joinDate}"></span>
-		</p>
-	</div>
-	<h3>教育進捗</h3>
-	<form th:action="@{/staff/training/{id}(id=${staff.id})}" method="get">
-		<label>習得度：</label>
-		<select name="statusFilter">
-			<option value="all"
-					th:selected="${selectedStatus == null
-						|| selectedStatus == ''
-						|| selectedStatus == 'all'}">すべて
-			</option>
-			<option value="NOT_STARTED"
-					th:selected="${selectedStatus == 'NOT_STARTED'}">未習得
-			</option>
-			<option value="IN_PROGRESS"
-					th:selected="${selectedStatus == 'IN_PROGRESS'}">練習中
-			</option>
-			<option value="COMPLETED"
-					th:selected="${selectedStatus == 'COMPLETED'}">習得済み
-			</option>
-		</select>
-		<button type="submit">絞り込み</button>
-		<a th:href="@{/staff/training/{id}(id=${staff.id})}">クリア</a>
-	</form>
-	<table border="1">
-		<tr>
-			<th>教育項目</th>
-			<th>カテゴリ</th>
-			<th>習得度</th>
-			<th>習得目安</th>
-			<th>教育担当者</th>
-			<th>備考</th>
-			<th>操作</th>
-		</tr>
-		<tr th:each="skill : ${skillList}">
-			<form th:action="@{/staff/training/{staffId}/skill/{skillId}
-				(staffId=${staff.id}, skillId=${skill.id})}" method="post">
-				<td th:text="${skill.name}"></td>
-				<td th:text="${skill.category}"></td>
-				<td>
-					<select name="status">
-						<option value="NOT_STARTED"
-								th:selected="${statusMap[skill.id] == 'NOT_STARTED'}">未習得
-						</option>
-						<option value="IN_PROGRESS"
-								th:selected="${statusMap[skill.id] == 'IN_PROGRESS'}">練習中
-						</option>
-						<option value="COMPLETED"
-								th:selected="${statusMap[skill.id] == 'COMPLETED'}">習得済み
-						</option>
-					</select>
-				</td>
-				<td>
-					<spam th:text="${skill.estimatedDays}"></spam>日
-				</td>
-				<td>
-					<input type="text"
-						   name="trainerName"
-						   th:value="${progressMap[skill.id] != null
-								? progressMap[skill.id].trainerName: ''}">
-				</td>
-				<td>
-					<input type="text" name="memo"
-						   th:value="${progressMap[skill.id] != null
-								? progressMap[skill.id].memo: ''}">
-				</td>
-				<td>
-					<button type="submit">保存</button>
-				</td>
-			</form>
-		</tr>
-	</table>
-	<div>
-		<a href="/staff">スタッフ一覧へ戻る</a>
-	</div>
+
+<div class="app-layout">
+
+    <aside class="sidebar">
+
+        <div class="sidebar-title">
+            店舗スタッフ管理
+        </div>
+
+        <nav class="sidebar-menu">
+
+            <a href="/staff"
+               class="sidebar-link active">
+                スタッフ一覧
+            </a>
+
+            <a href="/skills"
+               class="sidebar-link">
+                教育項目
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <div class="main-area">
+
+        <header class="topbar">
+
+            <div class="topbar-title">
+                店舗スタッフ管理システム
+            </div>
+
+            <div class="topbar-user">
+                管理者
+            </div>
+
+        </header>
+
+
+        <main class="content">
+
+            <div class="page-heading">
+
+                <h1>教育状況</h1>
+
+                <p>
+                    スタッフごとの教育進捗を管理します。
+                </p>
+
+            </div>
+
+
+            <section class="panel">
+
+                <div class="staff-info-card">
+
+                    <div class="staff-name-cell">
+
+                        <div class="staff-avatar">
+                            👤
+                        </div>
+
+                        <div class="staff-info-main">
+
+                            <div class="staff-info-name"
+                                 th:text="${staff.name}">
+                                山田 太郎
+                            </div>
+
+                            <div class="staff-info-sub">
+
+                                入社日：
+                                <span th:text="${staff.joinDate}">
+                                    2026-09-01
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <a href="/staff"
+                       class="button button-secondary">
+                        スタッフ一覧へ戻る
+                    </a>
+
+                </div>
+
+            </section>
+
+
+            <section class="panel">
+
+                <div class="panel-title">
+                    教育状況絞り込み
+                </div>
+
+
+                <form th:action="@{/staff/training/{id}(id=${staff.id})}"
+                      method="get"
+                      class="training-filter">
+
+                    <div class="form-group">
+
+                        <label for="statusFilter">
+                            習得度
+                        </label>
+
+                        <select id="statusFilter"
+                                name="statusFilter">
+
+                            <option value="all"
+                                    th:selected="${selectedStatus == null
+                                        || selectedStatus == ''
+                                        || selectedStatus == 'all'}">
+                                すべて
+                            </option>
+
+                            <option value="NOT_STARTED"
+                                    th:selected="${selectedStatus == 'NOT_STARTED'}">
+                                未習得
+                            </option>
+
+                            <option value="IN_PROGRESS"
+                                    th:selected="${selectedStatus == 'IN_PROGRESS'}">
+                                練習中
+                            </option>
+
+                            <option value="COMPLETED"
+                                    th:selected="${selectedStatus == 'COMPLETED'}">
+                                習得済み
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <button type="submit"
+                            class="button button-primary">
+                        絞り込み
+                    </button>
+
+
+                    <a th:href="@{/staff/training/{id}(id=${staff.id})}"
+                       class="button button-secondary">
+                        クリア
+                    </a>
+
+                </form>
+
+            </section>
+
+
+            <section class="panel">
+
+                <div class="section-header">
+
+                    <h2>
+                        教育項目別の進捗
+                    </h2>
+
+                    <div class="list-count">
+
+                        全
+                        <span th:text="${#lists.size(skillList)}">
+                            0
+                        </span>
+                        件
+
+                    </div>
+
+                </div>
+
+
+                <div class="table-wrapper">
+
+                    <table class="training-table">
+
+                        <thead>
+
+                        <tr>
+                            <th>教育項目名</th>
+                            <th>カテゴリ</th>
+                            <th>習得度</th>
+                            <th>習得目安</th>
+                            <th>教育担当者</th>
+                            <th>備考</th>
+                            <th>操作</th>
+                        </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                        <tr th:each="skill : ${skillList}">
+
+
+                            <td th:text="${skill.name}">
+                                レジ操作
+                            </td>
+
+
+                            <td>
+
+                                <span class="category-badge"
+                                      th:text="${skill.category}">
+                                    接客
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                <select name="status"
+                                        class="status-select"
+                                        th:classappend="
+                                            ${statusMap[skill.id] == 'NOT_STARTED'} ? ' status-not-started' :
+                                            (${statusMap[skill.id] == 'IN_PROGRESS'} ? ' status-progress' :
+                                            ' status-completed')"
+                                        onchange="updateStatusColor(this)"
+                                        th:attr="form=|training-form-${skill.id}|">
+
+                                    <option value="NOT_STARTED"
+                                            th:selected="${statusMap[skill.id] == 'NOT_STARTED'}">
+                                        未習得
+                                    </option>
+
+                                    <option value="IN_PROGRESS"
+                                            th:selected="${statusMap[skill.id] == 'IN_PROGRESS'}">
+                                        練習中
+                                    </option>
+
+                                    <option value="COMPLETED"
+                                            th:selected="${statusMap[skill.id] == 'COMPLETED'}">
+                                        習得済み
+                                    </option>
+
+                                </select>
+
+                            </td>
+
+
+                            <td>
+
+                                <span class="estimated-days">
+
+                                    <span th:text="${skill.estimatedDays}">
+                                        7
+                                    </span>
+
+                                    日
+
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                <input type="text"
+                                       name="trainerName"
+                                       placeholder="担当者名"
+                                       th:value="${progressMap[skill.id] != null
+                                           ? progressMap[skill.id].trainerName
+                                           : ''}"
+                                       th:attr="form=|training-form-${skill.id}|">
+
+                            </td>
+
+
+                            <td>
+
+                                <textarea name="memo"
+                                          placeholder="備考を入力"
+                                          th:text="${progressMap[skill.id] != null
+                                              ? progressMap[skill.id].memo
+                                              : ''}"
+                                          th:attr="form=|training-form-${skill.id}|">
+                                </textarea>
+
+                            </td>
+
+
+                            <td>
+
+                                <form th:id="|training-form-${skill.id}|"
+                                      th:action="@{/staff/training/{staffId}/skill/{skillId}
+                                      (staffId=${staff.id}, skillId=${skill.id})}"
+                                      method="post">
+
+                                    <button type="submit"
+                                            class="button button-primary">
+                                        保存
+                                    </button>
+
+                                </form>
+
+                            </td>
+
+                        </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+                <div class="training-note">
+                    ※変更した教育項目ごとに「保存」を押してください。
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    function updateStatusColor(selectElement) {
+
+        selectElement.classList.remove(
+            "status-not-started",
+            "status-progress",
+            "status-completed"
+        );
+
+        if (selectElement.value === "NOT_STARTED") {
+
+            selectElement.classList.add(
+                "status-not-started"
+            );
+
+        } else if (selectElement.value === "IN_PROGRESS") {
+
+            selectElement.classList.add(
+                "status-progress"
+            );
+
+        } else if (selectElement.value === "COMPLETED") {
+
+            selectElement.classList.add(
+                "status-completed"
+            );
+
+        }
+    }
+
+</script>
+
 </body>
 </html>

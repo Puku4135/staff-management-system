@@ -1,65 +1,178 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-	<meta charset="UTF-8">
-	<title>教育項目編集</title>
+    <meta charset="UTF-8">
+    <title>教育項目編集</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
 </head>
+
 <body>
-	<h1>店舗スタッフ管理システム</h1>
-	<h2>教育項目編集</h2>
-	
-	<form th:action="@{/skills/edit/{id}(id=${skill.id})}"
-		method="post">
-		<div>
-			<label>教育項目：</label>
-			<input type="text"
-					name="name"
-					th:value="${skill.name}"
-					required>
-		</div>
-		<div>
-			<label>カテゴリ：</label>
-			<select name="category">
-				<option value="接客"
-						th:selected="${skill.category == '接客'}">
-					接客
-				</option>
-				<option value="調理"
-						th:selected="${skill.category == '調理'}">
-					調理
-					</option>
-				<option value="清掃"
-						th:selected="${skill.category == '清掃'}">
-					清掃
-				</option>
-				<option value="店舗運営"
-						th:selected="${skill.category == '店舗運営'}">
-					店舗運営
-				</option>
-				<option value="その他"
-						th:selected="${skill.category == 'その他'}">
-					その他
-				</option>
-			</select>
-		</div>
-		<div>
-			<label>習得目安：</label>
-			<input type="number"
-					name="estimatedDays"
-					th:value="${skill.estimatedDays}"
-					min="1"
-					required>日
-		</div>
-		<div>
-			<button type="submit">
-				更新
-			</button>
-		</div>
-	</form>
-	<div>
-		<a href="/skills">
-			教育項目一覧へ戻る
-		</a>
-	</div>
+
+<div class="app-layout">
+
+    <aside class="sidebar">
+
+        <div class="sidebar-title">
+            店舗スタッフ管理
+        </div>
+
+        <nav class="sidebar-menu">
+
+            <a href="/staff"
+               class="sidebar-link">
+                スタッフ一覧
+            </a>
+
+            <a href="/skills"
+               class="sidebar-link active">
+                教育項目
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <div class="main-area">
+
+        <header class="topbar">
+
+            <div class="topbar-title">
+                店舗スタッフ管理システム
+            </div>
+
+            <div class="topbar-user">
+                管理者
+            </div>
+
+        </header>
+
+
+        <main class="content">
+
+            <div class="page-heading">
+
+                <h1>教育項目編集</h1>
+
+                <p>
+                    登録済みの教育項目を変更します。
+                </p>
+
+            </div>
+
+
+            <section class="panel form-panel">
+
+                <div class="form-title">
+                    教育項目情報
+                </div>
+
+                <div class="form-description">
+                    教育内容・カテゴリ・習得目安を編集してください。
+                </div>
+
+
+                <form th:action="@{/skills/edit/{id}(id=${skill.id})}"
+                      method="post"
+                      class="form-body">
+
+
+                    <div class="form-field">
+
+                        <label for="name">
+                            教育項目名
+                        </label>
+
+                        <input type="text"
+                               id="name"
+                               name="name"
+                               th:value="${skill.name}"
+                               required>
+
+                    </div>
+
+
+                    <div class="form-field">
+
+                        <label for="category">
+                            カテゴリ
+                        </label>
+
+                        <select id="category"
+                                name="category">
+
+                            <option value="接客"
+                                    th:selected="${skill.category == '接客'}">
+                                接客
+                            </option>
+
+                            <option value="調理"
+                                    th:selected="${skill.category == '調理'}">
+                                調理
+                            </option>
+
+                            <option value="清掃"
+                                    th:selected="${skill.category == '清掃'}">
+                                清掃
+                            </option>
+
+                            <option value="店舗運営"
+                                    th:selected="${skill.category == '店舗運営'}">
+                                店舗運営
+                            </option>
+
+                            <option value="その他"
+                                    th:selected="${skill.category == 'その他'}">
+                                その他
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-field">
+
+                        <label for="estimatedDays">
+                            習得目安（日）
+                        </label>
+
+                        <input type="number"
+                               id="estimatedDays"
+                               name="estimatedDays"
+                               min="1"
+                               th:value="${skill.estimatedDays}"
+                               required>
+
+                    </div>
+
+
+                    <div class="form-actions">
+
+                        <button type="submit"
+                                class="button button-primary">
+                            更新する
+                        </button>
+
+                        <a href="/skills"
+                           class="button button-secondary">
+                            一覧へ戻る
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</div>
+
 </body>
 </html>

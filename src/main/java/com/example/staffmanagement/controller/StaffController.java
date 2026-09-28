@@ -29,21 +29,31 @@ public class StaffController {
 	
 	@GetMapping("/staff")
 	public String showStaffList(
-			@RequestParam(required = false) String keyword,
-			Model model) {
+			@RequestParam(required = false)
+			String keyword, Model model) {
+		
+		List<Staff> displayStaffList;
 		
 		if (keyword == null || keyword.trim().isEmpty()) {
-			model.addAttribute(
-				"staffList",
-				managementService.getStaffList()
-			);
+			displayStaffList = managementService.getStaffList();
 		} else {
-			model.addAttribute(
-				"staffList",
-				managementService.searchStaff(keyword.trim())
+			displayStaffList = managementService.searchStaff(
+					keyword.trim());
+		}
+		model.addAttribute("staffList", displayStaffList);
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("staffCount", managementService.getStaffCount());
+		model.addAttribute("inProgressStaffCount", managementService.getInProgressStaffCount());
+		model.addAttribute("completedTrainingCount", managementService .getCompletedTrainingCount());
+		
+		Map<Integer, String> staffStatusMap = new HashMap<>();
+		
+		for (Staff staff : displayStaffList) {
+			staffStatusMap.put(
+					staff.getId(), managementService .getStaffTrainingStatus(staff.getId())
 			);
 		}
-		model.addAttribute("keyword", keyword);
+		model.addAttribute("staffStatusMap", staffStatusMap);
 		
 		return "staff-list";
 	}

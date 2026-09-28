@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.example.staffmanagement.model.SkillStatus;
 import com.example.staffmanagement.model.TrainingProgress;
 
 public interface TrainingProgressRepository
@@ -15,4 +16,6 @@ public interface TrainingProgressRepository
 	void deleteByStaffId(int staffId);
 	
 	void deleteBySkillId(int skillId);
+	
+	long countByStatus(SkillStatus status);
 }

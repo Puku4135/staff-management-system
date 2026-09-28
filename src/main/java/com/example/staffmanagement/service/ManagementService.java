@@ -170,4 +170,53 @@ public class ManagementService {
 		}
 		return resultList;
 	}
+	
+	public long getStaffCount() {
+	    return staffRepository.count();
+	}
+
+	public long getSkillCount() {
+	    return skillRepository.count();
+	}
+
+	public long getCompletedTrainingCount() {
+	    return trainingProgressRepository
+	            .countByStatus(SkillStatus.COMPLETED);
+	}
+	
+	public String getStaffTrainingStatus(int staffId) {
+		List<Skill> skills = skillRepository.findAll();
+		
+		if (skills.isEmpty()) {return "NOT_STARTED";}
+		
+		boolean allNotStarted = true;
+		boolean allCompleted = true;
+		
+		for (Skill skill : skills) {
+			SkillStatus status = getSkillStatus(
+					staffId, skill.getId());
+			
+			if (status != SkillStatus.NOT_STARTED) {
+				allNotStarted = false;}
+			if (status != SkillStatus.COMPLETED) {
+				allCompleted = false;}
+		}
+		
+		if (allCompleted) {return "COMPLETED";}
+		if (allNotStarted) {return "NOT_STARTED";}
+		
+		return "IN_PROGRESS";
+	}
+	
+	public long getInProgressStaffCount() {
+		long count = 0;
+		
+		for (Staff staff : staffRepository.findAll()) {
+			String trainingStatus = getStaffTrainingStatus(
+					staff.getId());
+			
+			if (trainingStatus.equals("IN_PROGRESS")) {count++;}
+		}
+		return count;
+	}
 }

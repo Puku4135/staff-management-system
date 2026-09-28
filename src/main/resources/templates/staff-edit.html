@@ -4,26 +4,131 @@
 <head>
     <meta charset="UTF-8">
     <title>スタッフ編集</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
 </head>
 
 <body>
 
-    <h1>店舗スタッフ管理システム</h1>
-    <h2>スタッフ編集</h2>
-	<form th:action="@{/staff/edit/{id}(id=${staff.id})}" method="post">
-		<div>
-			<label>名前：</label>
-			<input type="text" name="name" th:value="${staff.name}">
-		</div>
-		<div>
-			<label>入社日：</label>
-			<input type="date" name="joinDate" th:value="${staff.joinDate}">
-		</div>
-		<div>
-			<button type="submit">更新</button>
-		</div>
-	</form>
+<div class="app-layout">
+
+    <aside class="sidebar">
+
+        <div class="sidebar-title">
+            店舗スタッフ管理
+        </div>
+
+        <nav class="sidebar-menu">
+
+            <a href="/staff"
+               class="sidebar-link active">
+                スタッフ一覧
+            </a>
+
+            <a href="/skills"
+               class="sidebar-link">
+                教育項目
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <div class="main-area">
+
+        <header class="topbar">
+
+            <div class="topbar-title">
+                店舗スタッフ管理システム
+            </div>
+
+            <div class="topbar-user">
+                管理者
+            </div>
+
+        </header>
+
+
+        <main class="content">
+
+            <div class="page-heading">
+
+                <h1>スタッフ編集</h1>
+
+                <p>
+                    登録済みスタッフの情報を変更します。
+                </p>
+
+            </div>
+
+
+            <section class="panel form-panel">
+
+                <div class="form-title">
+                    スタッフ情報
+                </div>
+
+
+                <form th:action="@{/staff/edit/{id}(id=${staff.id})}"
+                      method="post"
+                      class="form-body">
+
+
+                    <div class="form-field">
+
+                        <label for="name">
+                            名前
+                        </label>
+
+                        <input type="text"
+                               id="name"
+                               name="name"
+                               th:value="${staff.name}"
+                               required>
+
+                    </div>
+
+
+                    <div class="form-field">
+
+                        <label for="joinDate">
+                            入社日
+                        </label>
+
+                        <input type="date"
+                               id="joinDate"
+                               name="joinDate"
+                               th:value="${staff.joinDate}"
+                               required>
+
+                    </div>
+
+
+                    <div class="form-actions">
+
+                        <button type="submit"
+                                class="button button-primary">
+                            更新する
+                        </button>
+
+                        <a href="/staff"
+                           class="button button-secondary">
+                            一覧へ戻る
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</div>
 
 </body>
-
 </html>

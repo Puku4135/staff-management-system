@@ -1,60 +1,316 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>スタッフ一覧</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
 </head>
+
 <body>
 
-    <h1>店舗スタッフ管理システム</h1>
-    <h2>スタッフ一覧</h2>
-	
-	<form action="/staff" method="get">
-		<label>スタッフ検索：</label>
-		<input type="text"
-			name="keyword"
-			th:value="${keyword}">
-		<button type="submit">
-			検索
-		</button>
-		
-		<a href="/staff">
-			クリア
-		</a>
-	</form>
-	
-	<a href="/skills">教育項目一覧へ</ahref>
-	
-	<a href="/staff/new">スタッフを登録する</a>
-	
-	<table border="1">
-		
-		<tr>
-			<th>No.</th>
-			<th>名前</th>
-			<th>入社日</th>
-			<th>操作</th>
-		</tr>
-		
-		<tr th:each="staff, stat : ${staffList}">
-			<td th:text="${stat.count}"></td>
-			<td th:text="${staff.name}"></td>
-			<td th:text="${staff.joinDate}"></td>
-			<td>
-				<a th:href="@{/staff/training/{id}(id=${staff.id})}">
-					教育状況
-				</a>
-				<a th:href="@{/staff/edit/{id}(id=${staff.id})}">
-					編集
-				</a>
-				<form th:action="@{/staff/delete/{id}(id=${staff.id})}"
-						method="post" style="display:inline;"
-						onsubmit="return confirm('このスタッフを削除しますか？');">
-					<button type="submit">削除</button>
-				</form>
-			</td>
-		</tr>
-	</table>
+<div class="app-layout">
+
+    <aside class="sidebar">
+
+        <div class="sidebar-title">
+            店舗スタッフ管理
+        </div>
+
+        <nav class="sidebar-menu">
+
+            <a href="/staff"
+               class="sidebar-link active">
+                スタッフ一覧
+            </a>
+
+            <a href="/skills"
+               class="sidebar-link">
+                教育項目
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <div class="main-area">
+
+        <header class="topbar">
+
+            <div class="topbar-title">
+                店舗スタッフ管理システム
+            </div>
+
+            <div class="topbar-user">
+                管理者
+            </div>
+
+        </header>
+
+
+        <main class="content">
+
+            <div class="page-heading">
+                <h1>スタッフ一覧</h1>
+                <p>スタッフ情報と教育状況を確認・管理します。</p>
+            </div>
+
+
+            <section class="summary-cards">
+
+                <div class="summary-card">
+
+                    <div class="summary-icon summary-icon-blue">
+                        👥
+                    </div>
+
+                    <div>
+                        <div class="summary-label">
+                            登録スタッフ数
+                        </div>
+
+                        <div class="summary-value"
+                             th:text="${staffCount} + '名'">
+                            0名
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <div class="summary-icon summary-icon-yellow">
+                        🎓
+                    </div>
+
+                    <div>
+                        <div class="summary-label">
+                            教育中
+                        </div>
+
+                        <div class="summary-value"
+                             th:text="${inProgressStaffCount} + '名'">
+                            0名
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <div class="summary-icon summary-icon-green">
+                        ✓
+                    </div>
+
+                    <div>
+                        <div class="summary-label">
+                            完了項目
+                        </div>
+
+                        <div class="summary-value"
+                             th:text="${completedTrainingCount} + '件'">
+                            0件
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <section class="panel">
+
+                <div class="search-row">
+
+                    <form action="/staff"
+                          method="get"
+                          class="search-form">
+
+                        <div class="form-group">
+
+                            <label for="keyword">
+                                スタッフ検索
+                            </label>
+
+                            <input type="text"
+                                   id="keyword"
+                                   name="keyword"
+                                   th:value="${keyword}"
+                                   placeholder="名前で検索できます">
+
+                        </div>
+
+
+                        <button type="submit"
+                                class="button button-primary">
+                            検索
+                        </button>
+
+
+                        <a href="/staff"
+                           class="button button-secondary">
+                            クリア
+                        </a>
+
+                    </form>
+
+
+                    <div class="actions">
+
+                        <a href="/staff/new"
+                           class="button button-primary">
+                            ＋ スタッフ登録
+                        </a>
+
+                        <a href="/skills"
+                           class="button button-secondary">
+                            教育項目一覧
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <section class="panel">
+
+                <div class="section-header">
+
+                    <h2>スタッフ一覧</h2>
+
+                    <div class="list-count">
+                        表示
+                        <span th:text="${#lists.size(staffList)}">0</span>
+                        件 /
+                        全
+                        <span th:text="${staffCount}">0</span>
+                        件
+                    </div>
+
+                </div>
+
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                        <tr>
+                            <th>No.</th>
+                            <th>名前</th>
+                            <th>入社日</th>
+                            <th>教育状況</th>
+                            <th>操作</th>
+                        </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                        <tr th:each="staff, stat : ${staffList}">
+
+                            <td th:text="${stat.count}">
+                                1
+                            </td>
+
+
+                            <td>
+
+                                <div class="staff-name-cell">
+
+                                    <div class="staff-avatar">
+                                        👤
+                                    </div>
+
+                                    <span th:text="${staff.name}">
+                                        山田 太郎
+                                    </span>
+
+                                </div>
+
+                            </td>
+
+
+                            <td th:text="${staff.joinDate}">
+                                2026-09-01
+                            </td>
+
+
+                            <td>
+
+                                <span th:if="${staffStatusMap[staff.id] == 'NOT_STARTED'}"
+                                      class="status-badge status-not-started">
+                                    未着手
+                                </span>
+
+                                <span th:if="${staffStatusMap[staff.id] == 'IN_PROGRESS'}"
+                                      class="status-badge status-progress">
+                                    進行中
+                                </span>
+
+                                <span th:if="${staffStatusMap[staff.id] == 'COMPLETED'}"
+                                      class="status-badge status-completed">
+                                    完了
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                <div class="actions">
+
+                                    <a th:href="@{/staff/training/{id}(id=${staff.id})}"
+                                       class="button button-primary">
+                                        教育状況
+                                    </a>
+
+
+                                    <a th:href="@{/staff/edit/{id}(id=${staff.id})}"
+                                       class="button button-secondary">
+                                        編集
+                                    </a>
+
+
+                                    <form th:action="@{/staff/delete/{id}(id=${staff.id})}"
+                                          method="post"
+                                          onsubmit="return confirm('このスタッフを削除しますか？');">
+
+                                        <button type="submit"
+                                                class="button button-danger">
+                                            削除
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</div>
 
 </body>
 </html>
