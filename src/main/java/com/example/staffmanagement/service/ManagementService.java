@@ -219,4 +219,57 @@ public class ManagementService {
 		}
 		return count;
 	}
+	
+	public List<Staff> getSortedStaffList(String sort) {
+		List<Staff> staffList = staffRepository.findAll();
+		return sortStaffList(staffList, sort);
+	}
+	
+	public List<Staff> sortStaffList(
+			List<Staff> staffList, String sort) {		
+		if (sort == null
+				|| sort.isEmpty()
+				|| sort.equals("id")) {
+			staffList.sort((staff1, staff2) -> Integer.compare(
+					staff1.getId(), staff2.getId())
+			);
+		} else if (sort.equals("joinDateDesc")) {
+			staffList.sort((staff1, staff2) -> staff2.getJoinDate()
+					.compareTo(staff1.getJoinDate())
+			);
+		} else if (sort.equals("joinDateAsc")) {
+			staffList.sort((staff1, staff2) -> staff1.getJoinDate()
+					.compareTo(staff2.getJoinDate())
+			);
+		}
+		return staffList;
+	}
+	
+	public int getStaffProgressRate(int staffId) {
+
+	    List<Skill> skillList =
+	            skillRepository.findAll();
+
+	    if (skillList.isEmpty()) {
+	        return 0;
+	    }
+
+	    int completedCount = 0;
+
+	    for (Skill skill : skillList) {
+
+	        SkillStatus status =
+	                getSkillStatus(
+	                        staffId,
+	                        skill.getId()
+	                );
+
+	        if (status == SkillStatus.COMPLETED) {
+	            completedCount++;
+	        }
+	    }
+
+	    return completedCount * 100
+	            / skillList.size();
+	}
 }

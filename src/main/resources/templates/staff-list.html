@@ -127,37 +127,68 @@
 
                 <div class="search-row">
 
-                    <form action="/staff"
-                          method="get"
-                          class="search-form">
+					<form action="/staff"
+					      method="get"
+					      class="search-form">
 
-                        <div class="form-group">
+					    <div class="form-group">
 
-                            <label for="keyword">
-                                スタッフ検索
-                            </label>
+					        <label for="keyword">
+					            スタッフ検索
+					        </label>
 
-                            <input type="text"
-                                   id="keyword"
-                                   name="keyword"
-                                   th:value="${keyword}"
-                                   placeholder="名前で検索できます">
+					        <input type="text"
+					               id="keyword"
+					               name="keyword"
+					               th:value="${keyword}"
+					               placeholder="名前で検索できます">
 
-                        </div>
-
-
-                        <button type="submit"
-                                class="button button-primary">
-                            検索
-                        </button>
+					    </div>
 
 
-                        <a href="/staff"
-                           class="button button-secondary">
-                            クリア
-                        </a>
+					    <div class="form-group">
 
-                    </form>
+					        <label for="sort">
+					            並び順
+					        </label>
+
+							<select id="sort"
+							        name="sort">
+
+							    <option value="id"
+							            th:selected="${selectedSort == null
+							                || selectedSort == ''
+							                || selectedSort == 'id'}">
+							        登録順
+							    </option>
+
+							    <option value="joinDateDesc"
+							            th:selected="${selectedSort == 'joinDateDesc'}">
+							        入社日が新しい順
+							    </option>
+
+							    <option value="joinDateAsc"
+							            th:selected="${selectedSort == 'joinDateAsc'}">
+							        入社日が古い順
+							    </option>
+
+							</select>
+
+					    </div>
+
+
+					    <button type="submit"
+					            class="button button-primary">
+					        検索
+					    </button>
+
+
+					    <a href="/staff"
+					       class="button button-secondary">
+					        クリア
+					    </a>
+
+					</form>
 
 
                     <div class="actions">
@@ -204,11 +235,12 @@
                         <thead>
 
                         <tr>
-                            <th>No.</th>
-                            <th>名前</th>
-                            <th>入社日</th>
-                            <th>教育状況</th>
-                            <th>操作</th>
+							<th>No.</th>
+							<th>スタッフ名</th>
+							<th>入社日</th>
+							<th>教育状況</th>
+							<th>進捗率</th>
+							<th>操作</th>
                         </tr>
 
                         </thead>
@@ -263,6 +295,12 @@
                                 </span>
 
                             </td>
+							
+							<td>
+							    <span th:text="${progressRateMap[staff.id] + '%'}">
+							        0%
+							    </span>
+							</td>
 
 
                             <td>

@@ -69,6 +69,11 @@
                 <div class="form-title">
                     スタッフ情報
                 </div>
+				
+				<div th:if="${errorMessage != null}"
+					class="error-message"
+					th:text="${errorMessage}">
+				</div>
 
 
                 <form th:action="@{/staff/edit/{id}(id=${staff.id})}"
@@ -82,11 +87,13 @@
                             名前
                         </label>
 
-                        <input type="text"
-                               id="name"
-                               name="name"
-                               th:value="${staff.name}"
-                               required>
+						<input type="text"
+						       id="name"
+						       name="name"
+						       th:value="${staff.name}"
+						       required
+						       oninvalid="this.setCustomValidity('名前を入力してください。')"
+						       oninput="this.setCustomValidity('')">
 
                     </div>
 
@@ -97,11 +104,13 @@
                             入社日
                         </label>
 
-                        <input type="date"
-                               id="joinDate"
-                               name="joinDate"
-                               th:value="${staff.joinDate}"
-                               required>
+						<input type="date"
+						       id="joinDate"
+						       name="joinDate"
+						       th:value="${staff.joinDate}"
+						       required
+						       oninvalid="this.setCustomValidity('入社日を入力してください。')"
+						       oninput="this.setCustomValidity('')">
 
                     </div>
 

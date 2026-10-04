@@ -74,6 +74,10 @@
                     教育内容・カテゴリ・習得目安を編集してください。
                 </div>
 
+				<div th:if="${errorMessage != null}"
+				     class="error-message"
+				     th:text="${errorMessage}">
+				</div>
 
                 <form th:action="@{/skills/edit/{id}(id=${skill.id})}"
                       method="post"
@@ -90,7 +94,9 @@
                                id="name"
                                name="name"
                                th:value="${skill.name}"
-                               required>
+                               required
+							   oninvalid="this.setCustomValidity('教育項目名を入力してください。')"
+							   oninput="this.setCustomValidity('')">
 
                     </div>
 
@@ -145,7 +151,9 @@
                                name="estimatedDays"
                                min="1"
                                th:value="${skill.estimatedDays}"
-                               required>
+                               required
+							   oninvalid="this.setCustomValidity('習得目安は1日以上で入力してください。')"
+							   oninput="this.setCustomValidity('')">
 
                     </div>
 

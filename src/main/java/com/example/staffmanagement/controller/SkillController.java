@@ -45,8 +45,7 @@ public class SkillController {
 			Integer estimatedDays,
 			Model model) {
 		
-		if (name == null || name.trim().isEmpty()) {
-			
+		if (name == null || name.trim().isEmpty()) {			
 			model.addAttribute(
 				"errorMessage",
 				"教育項目名を入力してください。"
@@ -58,8 +57,17 @@ public class SkillController {
 			return "skill-list";
 		}
 		
-		if (estimatedDays == null || estimatedDays < 1) {
-			
+		if (!isValidCategory(category)) {			
+			model.addAttribute(
+					"errorMessage", "正しいカテゴリを選択してください。"
+			);
+			model.addAttribute(
+					"skillList", managementService.getSkillList()
+			);
+			return "skill-list";
+		}
+		
+		if (estimatedDays == null || estimatedDays < 1) {			
 			model.addAttribute(
 				"errorMessage",
 				"習得目安は1日以上で入力してください。"
@@ -85,6 +93,10 @@ public class SkillController {
 		Skill targetSkill =
 				managementService.getSkillById(id);
 		
+		if (targetSkill == null) {
+			return "redirect:/skills";
+		}
+		
 		model.addAttribute(
 			"skill",
 			targetSkill
@@ -97,7 +109,45 @@ public class SkillController {
 			@PathVariable int id,
 			@RequestParam String name,
 			@RequestParam String category,
-			@RequestParam int estimatedDays) {
+			@RequestParam (required = false)
+			Integer estimatedDays, Model model) {
+		
+		Skill targetSkill =
+				managementService.getSkillById(id);
+		
+		if (targetSkill == null) {
+			return "redirect:/skills";
+		}
+		
+		if (name == null || name.trim().isEmpty()) {
+			model.addAttribute(
+					"errorMessage", "教育項目名を入力してください。"
+			);
+			model.addAttribute(
+					"skill", targetSkill
+			);
+			return "skill-edit";
+		}
+		
+		if (!isValidCategory(category)) {
+			model.addAttribute(
+					"errorMessage", "正しいカテゴリを選択してください。"
+			);
+			model.addAttribute(
+					"skill", targetSkill
+			);
+			return "skill-edit";
+		}
+		
+		if (estimatedDays == null || estimatedDays < 1) {
+			model.addAttribute(
+					"errorMessage", "習得目安は1日以上で入力してください。"
+			);
+			model.addAttribute(
+					"skill", targetSkill
+			);
+			return "skill-edit";
+		}
 		
 		managementService.updateSkill(
 				id, name.trim(), category, estimatedDays);
@@ -108,9 +158,26 @@ public class SkillController {
 	public String deleteSkill(
 			@PathVariable int id) {
 		
+		Skill targetSkill =
+				managementService.getSkillById(id);
+		
+		if (targetSkill == null) {
+			return "redirect:/skills";
+		}
+		
 		managementService.deleteSkill(id);
 		
 		return "redirect:/skills";
+	}
+	
+	private boolean isValidCategory(String category) {
+		return category != null && (
+				category.equals("接客")
+				|| category.equals("調理")
+				|| category.equals("清掃")
+				|| category.equals("店舗運営")
+				|| category.equals("その他")
+				);
 	}
 }
 

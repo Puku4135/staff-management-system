@@ -30,18 +30,39 @@ public class StaffController {
 	@GetMapping("/staff")
 	public String showStaffList(
 			@RequestParam(required = false)
-			String keyword, Model model) {
+			String keyword, 
+			@RequestParam(required = false)
+			String sort,
+			Model model) {
 		
 		List<Staff> displayStaffList;
-		
-		if (keyword == null || keyword.trim().isEmpty()) {
-			displayStaffList = managementService.getStaffList();
+
+		if (keyword == null
+		        || keyword.trim().isEmpty()) {
+
+		    displayStaffList =
+		            managementService
+		                    .getSortedStaffList(sort);
+
 		} else {
-			displayStaffList = managementService.searchStaff(
-					keyword.trim());
+
+		    displayStaffList =
+		            managementService.searchStaff(
+		                    keyword.trim()
+		            );
+
+		    displayStaffList =
+		            managementService.sortStaffList(
+		                    displayStaffList,
+		                    sort
+		            );
 		}
 		model.addAttribute("staffList", displayStaffList);
 		model.addAttribute("keyword", keyword);
+		model.addAttribute(
+		        "selectedSort",
+		        sort
+		);
 		model.addAttribute("staffCount", managementService.getStaffCount());
 		model.addAttribute("inProgressStaffCount", managementService.getInProgressStaffCount());
 		model.addAttribute("completedTrainingCount", managementService .getCompletedTrainingCount());
@@ -54,6 +75,25 @@ public class StaffController {
 			);
 		}
 		model.addAttribute("staffStatusMap", staffStatusMap);
+		
+		Map<Integer, Integer> progressRateMap =
+		        new HashMap<>();
+
+		for (Staff staff : displayStaffList) {
+
+		    progressRateMap.put(
+		            staff.getId(),
+		            managementService
+		                    .getStaffProgressRate(
+		                            staff.getId()
+		                    )
+		    );
+		}
+
+		model.addAttribute(
+		        "progressRateMap",
+		        progressRateMap
+		);
 		
 		return "staff-list";
 	}
@@ -101,6 +141,10 @@ public class StaffController {
 		Staff targetStaff =
 		        managementService.getStaffById(id);
 		
+		if (targetStaff == null) {
+			return "redirect:/staff";
+		}
+		
 		model.addAttribute("staff", targetStaff);
 		return "staff-edit";
 	}
@@ -109,9 +153,36 @@ public class StaffController {
 	public String updateStaff(
 			@PathVariable int id,
 			@RequestParam String name,
-			@RequestParam
+			@RequestParam(required = false)
 			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-			LocalDate joinDate) {
+			LocalDate joinDate, Model model) {
+		
+		Staff targetStaff =
+		        managementService.getStaffById(id);
+		
+		if (targetStaff == null) {
+			return "redirect:/staff";
+		}
+		
+		if (name == null || name.trim().isEmpty()) {
+			model.addAttribute(
+					"errorMessage", "名前を入力してください。"
+			);
+			model.addAttribute(
+					"staff", targetStaff
+			);
+			return "staff-edit";
+		}
+		
+		if (joinDate == null) {
+			model.addAttribute(
+					"errorMessage", "入社日を入力してください。"
+			);
+			model.addAttribute(
+					"staff", targetStaff
+			);
+			return "staff-edit";
+		}
 		
 		managementService.updateStaff(
 				id, name.trim(), joinDate
@@ -126,13 +197,10 @@ public class StaffController {
 			String statusFilter,
 			Model model) {
 		
-		Staff targetStaff = null;
+		Staff targetStaff = managementService.getStaffById(id);
 		
-		for (Staff staff : managementService.getStaffList()) {
-			if (staff.getId() == id) {
-				targetStaff = staff;
-				break;
-			}
+		if (targetStaff == null) {
+			return "redirect:/staff";
 		}
 		
 		model.addAttribute("staff", targetStaff);
@@ -183,6 +251,13 @@ public class StaffController {
 	public String deleteStaff(
 			@PathVariable int id) {
 		
+		Staff targetStaff =
+		        managementService.getStaffById(id);
+		
+		if (targetStaff == null) {
+			return "redirect:/staff";
+		}
+		
 		managementService.deleteStaff(id);
 		
 		return "redirect:/staff";
@@ -192,16 +267,34 @@ public class StaffController {
 	public String updateTrainingprogress(
 			@PathVariable int staffId,
 			@PathVariable int skillId,
-			@RequestParam SkillStatus status,
+			@RequestParam String status,
 			@RequestParam String trainerName,
 			@RequestParam String memo) {
 		
+		Staff targetStaff =
+		        managementService.getStaffById(staffId);
+		
+		if (targetStaff == null) {
+			return "redirect:/staff";
+		}
+		
+		Skill targetSkill =
+		        managementService.getSkillById(skillId);
+		
+		if (targetSkill == null) {
+			return "redirect:/staff/training/" + staffId;
+		}
+		
+		SkillStatus selectedStatus;
+		
+		try {selectedStatus = SkillStatus.valueOf(status);
+		
+		} catch (IllegalArgumentException e) {
+			return "redirect:/staff/training/" + staffId;
+		}
+		
 		managementService.updateTrainingProgress(
-			staffId,
-			skillId,
-			status,
-			trainerName,
-			memo
+			staffId, skillId, selectedStatus, trainerName, memo
 		);
 		return "redirect:/staff/training/" + staffId;
 	}
