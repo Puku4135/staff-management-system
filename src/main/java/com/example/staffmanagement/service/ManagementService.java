@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.staffmanagement.model.Skill;
 import com.example.staffmanagement.model.SkillStatus;
@@ -123,16 +124,34 @@ public class ManagementService {
 		return SkillStatus.NOT_STARTED;
 	}
 	
+	@Transactional
 	public void deleteStaff(int staffId) {
-		trainingProgressRepository .deleteByStaffId(staffId);
-		
-		staffRepository.deleteById(staffId);
+
+	    long deletedProgressCount =
+	            trainingProgressRepository
+	                    .deleteByStaffId(staffId);
+
+	    if (deletedProgressCount == 0) {
+	        // 関連する教育状況がない場合も、
+	        // スタッフ本体の削除は続行する。
+	    }
+
+	    staffRepository.deleteById(staffId);
 	}
 	
+	@Transactional
 	public void deleteSkill(int skillId) {
-		trainingProgressRepository .deleteBySkillId(skillId);
-		
-		skillRepository.deleteById(skillId);
+
+	    long deletedProgressCount =
+	            trainingProgressRepository
+	                    .deleteBySkillId(skillId);
+
+	    if (deletedProgressCount == 0) {
+	        // この教育項目を使用している教育状況がない場合も、
+	        // 教育項目本体の削除は続行する。
+	    }
+
+	    skillRepository.deleteById(skillId);
 	}
 	
 	public List<Staff> searchStaff(String keyword) {

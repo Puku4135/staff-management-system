@@ -13,9 +13,9 @@ public interface TrainingProgressRepository
 	Optional<TrainingProgress> findByStaffIdAndSkillId(
 			int staffId, int skillId);
 	
-	void deleteByStaffId(int staffId);
+	long deleteByStaffId(int staffId);
 	
-	void deleteBySkillId(int skillId);
+	long deleteBySkillId(int skillId);
 	
 	long countByStatus(SkillStatus status);
 }
